@@ -1,0 +1,65 @@
+/* CV — quiet, fast, printable. Same tokens as the atlas, none of the theatre. */
+:root { --paper: #EEEBE3; --ink: #141414; --ink-2: #3A3A37; --mute: #7C7A73; --rule: rgba(20,20,20,.16); --signal: #E4572E;
+  --serif: "Instrument Serif", Georgia, serif; --sans: "Inter Tight", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #DCD8CD; color: var(--ink); font: 400 14.5px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.mono { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+
+.controls { position: sticky; top: 0; z-index: 5; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 12px clamp(14px, 3vw, 32px); background: rgba(220,216,205,.9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+.back { text-decoration: none; }
+.ctl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.lbl { color: var(--mute); }
+.seg { display: inline-flex; border: 1px solid var(--ink); border-radius: 999px; overflow: hidden; }
+.seg button { font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 8px 11px; }
+.seg [aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.print { font: 500 13px/1 var(--sans); padding: 9px 14px; border-radius: 999px; background: var(--signal); color: #fff; }
+
+.page { max-width: 210mm; margin: 28px auto 60px; background: var(--paper); padding: 18mm 17mm; box-shadow: 0 1px 0 rgba(0,0,0,.05), 0 20px 50px -20px rgba(0,0,0,.25); }
+.head { display: grid; grid-template-columns: 1fr auto; gap: 24px; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+h1 { font: 400 46px/1 var(--serif); margin: 0; letter-spacing: -.01em; }
+.headline { margin: 8px 0 0; font-weight: 500; font-size: 14.5px; max-width: 34em; }
+.contact { list-style: none; margin: 0; padding: 0; text-align: right; font-size: 12.5px; color: var(--ink-2); }
+.contact a { text-decoration: none; border-bottom: 1px solid var(--rule); }
+section { margin-top: 18px; }
+h2 { font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--signal); margin: 0 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
+h2.mt { margin-top: 18px; }
+section > p { margin: 0 0 6px; color: var(--ink-2); }
+.skills { margin: 0; }
+.skills div { display: grid; grid-template-columns: 170px 1fr; gap: 12px; padding: 3px 0; }
+.skills dt { font-weight: 600; }
+.skills dd { margin: 0; color: var(--ink-2); }
+.job { margin: 0 0 12px; break-inside: avoid; }
+.job header { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
+.job h3 { margin: 0; font-size: 14.5px; font-weight: 600; }
+.date { font: 400 11.5px var(--mono); color: var(--mute); white-space: nowrap; }
+.org { margin: 1px 0 4px; color: var(--mute); font-size: 13px; }
+.job ul { margin: 0; padding-left: 16px; color: var(--ink-2); }
+.job li { margin: 2px 0; }
+.plain { margin: 0; padding-left: 16px; color: var(--ink-2); }
+.plain li { margin: 3px 0; }
+.plain a { font-size: 12px; color: var(--mute); }
+.cols { display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; }
+.langs { list-style: none; padding: 0; margin: 0; }
+.langs li { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px dotted var(--rule); }
+.cvfoot { margin-top: 22px; padding-top: 8px; border-top: 1px solid var(--rule); font: 400 10.5px var(--mono); color: var(--mute); }
+
+@media (max-width: 720px) {
+  .page { margin: 0; padding: 22px 18px; box-shadow: none; }
+  .head, .cols { grid-template-columns: 1fr; }
+  .contact { text-align: left; }
+  .skills div { grid-template-columns: 1fr; gap: 0; }
+  h1 { font-size: 38px; }
+}
+
+@page { size: A4; margin: 12mm 13mm; }
+@media print {
+  body { background: #fff; font-size: 10.4pt; }
+  .no-print { display: none !important; }
+  .page { margin: 0; padding: 0; max-width: none; box-shadow: none; background: #fff; }
+  a { text-decoration: none; border: 0 !important; }
+  h1 { font-size: 30pt; }
+  section { margin-top: 12px; }
+  .job { margin-bottom: 8px; }
+}

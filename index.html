@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Baris Parlatangiller — An Atlas of Work</title>
+  <meta name="description" content="Senior GIS & Spatial Analyst and Urban Planner in Frankfurt am Main. Interactive portfolio and CV — urban heat, open data maps, masterplanning.">
+  <meta property="og:title" content="Baris Parlatangiller — An Atlas of Work">
+  <meta property="og:description" content="Senior GIS & Spatial Analyst · Urban & Regional Planner · Frankfurt am Main">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#EEEBE3">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip" href="#itinerary">Skip to content</a>
+
+  <header class="bar" id="bar">
+    <a class="mark" href="#top" aria-label="Top">
+      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M5 16h22M16 5v22" stroke="currentColor" stroke-width=".8"/><circle cx="16" cy="16" r="3.2" fill="var(--signal)"/></svg>
+      <span>B · P</span>
+    </a>
+    <div class="coords mono" id="coords" aria-hidden="true">50.1109° N · 8.6821° E</div>
+    <div class="bar-right">
+      <div class="seg" role="group" aria-label="Language">
+        <button data-lang="en">EN</button><button data-lang="de">DE</button><button data-lang="tr">TR</button>
+      </div>
+      <div class="seg mode" role="group" aria-label="Mode">
+        <a href="index.html" aria-current="page" data-i18n="nav.atlas">Atlas</a><a href="cv.html" data-keep-lang data-i18n="nav.cv">CV</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="plates" aria-label="Sections">
+    <a href="#top"><b>00</b></a>
+    <a href="#itinerary"><b>01</b><span data-i18n="nav.itinerary">Itinerary</span></a>
+    <a href="#layers"><b>02</b><span data-i18n="nav.layers">Layers</span></a>
+    <a href="#works"><b>03</b><span data-i18n="nav.works">Works</span></a>
+    <a href="#lab"><b>04</b><span data-i18n="nav.lab">Lab</span></a>
+    <a href="#index"><b>05</b><span data-i18n="nav.index">Index</span></a>
+    <a href="#contact"><b>06</b><span data-i18n="nav.contact">Contact</span></a>
+  </nav>
+
+  <main>
+    <!-- 00 HERO -->
+    <section class="hero" id="top">
+      <canvas id="field" aria-hidden="true"></canvas>
+      <div class="hero-inner">
+        <p class="kicker mono" data-i18n="hero.kicker">An atlas of work — Plate 00</p>
+        <h1 class="name"><span class="l1">Baris</span><span class="l2">Parlatangiller</span></h1>
+        <p class="role" data-i18n="hero.role">Senior GIS &amp; Spatial Analyst · Urban &amp; Regional Planner</p>
+        <p class="lede" data-i18n="hero.lede"></p>
+        <div class="cta">
+          <a class="btn btn-ink" href="#itinerary" data-i18n="hero.cta.explore">Explore the atlas</a>
+          <a class="btn btn-line" href="cv.html" data-keep-lang data-i18n="hero.cta.cv">Read the 30-second CV</a>
+        </div>
+      </div>
+      <dl class="stats" id="stats"></dl>
+      <a class="scrollcue mono" href="#itinerary"><span data-i18n="hero.scroll">Scroll</span> ↓</a>
+    </section>
+
+    <!-- 01 ITINERARY -->
+    <section class="sec" id="itinerary">
+      <header class="sec-head">
+        <p class="kicker mono" data-i18n="it.kicker"></p>
+        <h2 data-i18n="it.title"></h2>
+        <p class="sec-lede" data-i18n="it.lede"></p>
+      </header>
+      <div class="it-grid">
+        <figure class="it-map"><svg id="routeMap" viewBox="0 0 1000 760" role="img" aria-label="Map of career locations"></svg></figure>
+        <article class="it-detail" id="itDetail" aria-live="polite"></article>
+      </div>
+      <div class="gantt" id="gantt" role="list"></div>
+    </section>
+
+    <!-- 02 LAYERS -->
+    <section class="sec" id="layers">
+      <header class="sec-head">
+        <p class="kicker mono" data-i18n="ly.kicker"></p>
+        <h2 data-i18n="ly.title"></h2>
+        <p class="sec-lede" data-i18n="ly.lede"></p>
+      </header>
+      <div class="ly-grid">
+        <aside class="ly-panel">
+          <div class="ly-panel-head mono"><span data-i18n="ly.panel"></span>
+            <span><button class="link" id="lyAll" data-i18n="ly.all"></button> / <button class="link" id="lyNone" data-i18n="ly.none"></button></span>
+          </div>
+          <ul id="layerList"></ul>
+        </aside>
+        <div class="ly-matrix" id="matrix"></div>
+      </div>
+    </section>
+
+    <!-- 03 WORKS -->
+    <section class="sec" id="works">
+      <header class="sec-head">
+        <p class="kicker mono" data-i18n="wk.kicker"></p>
+        <h2 data-i18n="wk.title"></h2>
+      </header>
+      <div id="featured"></div>
+      <h3 class="sub mono" data-i18n="wk.more"></h3>
+      <div class="more" id="moreWorks"></div>
+      <h3 class="sub mono" data-i18n="wk.awards"></h3>
+      <ol class="awards" id="awards"></ol>
+    </section>
+
+    <!-- 04 LAB (dark) -->
+    <div class="lab-wrap" id="labWrap"><section class="sec lab" id="lab">
+      <header class="sec-head">
+        <p class="kicker mono" data-i18n="lab.kicker"></p>
+        <h2 data-i18n="lab.title"></h2>
+        <p class="sec-lede" data-i18n="lab.lede"></p>
+      </header>
+      <div class="lab-grid">
+        <div class="lab-stage">
+          <canvas id="plaza" aria-label="Interactive plaza heat model"></canvas>
+          <div class="lab-legend mono"><span>26 °C</span><i></i><span>60 °C</span></div>
+        </div>
+        <aside class="lab-side">
+          <div class="tools" role="radiogroup" id="tools">
+            <button data-tool="tree" aria-checked="true" role="radio"><i style="background:#3E7C4F"></i><span data-i18n="lab.tool.tree"></span></button>
+            <button data-tool="water" role="radio"><i style="background:#3B7EA1"></i><span data-i18n="lab.tool.water"></span></button>
+            <button data-tool="grass" role="radio"><i style="background:#8FB36A"></i><span data-i18n="lab.tool.grass"></span></button>
+            <button data-tool="sail" role="radio"><i style="background:#E8E2D0"></i><span data-i18n="lab.tool.sail"></span></button>
+            <button data-tool="paving" role="radio"><i style="background:#B9B2A3"></i><span data-i18n="lab.tool.paving"></span></button>
+          </div>
+          <dl class="readout">
+            <div><dt class="mono" data-i18n="lab.mean"></dt><dd id="rMean">–</dd></div>
+            <div><dt class="mono" data-i18n="lab.max"></dt><dd id="rMax">–</dd></div>
+            <div><dt class="mono" data-i18n="lab.shade"></dt><dd id="rShade">–</dd></div>
+            <div><dt class="mono" data-i18n="lab.delta"></dt><dd id="rDelta">–</dd></div>
+          </dl>
+          <div class="lab-actions">
+            <button class="btn btn-paper" id="labGreen" data-i18n="lab.green"></button>
+            <button class="btn btn-ghost" id="labReset" data-i18n="lab.reset"></button>
+          </div>
+          <p class="lab-note"><span data-i18n="lab.note"></span> <a id="labLink" target="_blank" rel="noopener" data-i18n="lab.notelink"></a> ↗</p>
+        </aside>
+      </div>
+    </section></div>
+
+    <!-- 05 INDEX -->
+    <section class="sec" id="index">
+      <header class="sec-head">
+        <p class="kicker mono" data-i18n="ix.kicker"></p>
+        <h2 data-i18n="ix.title"></h2>
+      </header>
+      <div class="ix-controls">
+        <div class="chips" id="ixChips">
+          <button data-kind="all" aria-pressed="true" data-i18n="ix.all"></button>
+          <button data-kind="research" data-i18n="ix.research"></button>
+          <button data-kind="30dmc" data-i18n="ix.30dmc"></button>
+        </div>
+        <input type="search" id="ixSearch" data-i18n-ph="ix.search" aria-label="Search">
+        <span class="mono ix-count" id="ixCount"></span>
+      </div>
+      <div class="ix-wrap">
+        <table class="ix">
+          <thead><tr><th class="mono" data-i18n="ix.no"></th><th class="mono" data-i18n="ix.project"></th><th class="mono" data-i18n="ix.city"></th><th class="mono hide-s" data-i18n="ix.theme"></th><th class="mono" data-i18n="ix.links"></th></tr></thead>
+          <tbody id="ixBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 06 CONTACT -->
+    <section class="sec contact" id="contact">
+      <p class="kicker mono" data-i18n="ct.kicker"></p>
+      <h2 class="big" data-i18n="ct.title"></h2>
+      <p class="sec-lede" data-i18n="ct.lede"></p>
+      <ul class="ct-links" id="ctLinks"></ul>
+    </section>
+  </main>
+
+  <footer class="foot mono">
+    <span data-i18n="ft.built"></span>
+    <span data-i18n="ft.code"></span>
+    <span>50.1109° N · 8.6821° E</span>
+  </footer>
+
+  <script src="data/ui.js"></script>
+  <script src="data/content.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/field.js"></script>
+  <script src="assets/js/plates.js"></script>
+  <script src="assets/js/lab.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
