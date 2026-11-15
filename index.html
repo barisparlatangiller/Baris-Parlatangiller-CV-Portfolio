@@ -3,72 +3,85 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Baris Parlatangiller — An Atlas of Work</title>
-  <meta name="description" content="Senior GIS & Spatial Analyst and Urban Planner in Frankfurt am Main. Interactive portfolio and CV — urban heat, open data maps, masterplanning.">
-  <meta property="og:title" content="Baris Parlatangiller — An Atlas of Work">
-  <meta property="og:description" content="Senior GIS & Spatial Analyst · Urban & Regional Planner · Frankfurt am Main">
+  <title>Baris Parlatangiller · Atlas of Work</title>
+  <meta name="description" content="Spatial analyst and urban planner, Frankfurt am Main. Maps, models and masterplans. An interactive portfolio and CV in English, German and Turkish.">
+  <meta property="og:title" content="Baris Parlatangiller · Atlas of Work">
+  <meta property="og:description" content="Spatial analyst & urban planner · Raumanalytiker & Stadtplaner · Mekânsal analist & şehir plancısı">
   <meta property="og:type" content="website">
-  <meta name="theme-color" content="#EEEBE3">
+  <meta name="theme-color" content="#D8D8D3">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <a class="skip" href="#itinerary">Skip to content</a>
+  <a class="skip" href="#route">Skip to content</a>
+  <div class="progress" id="progress"></div>
+  <div class="gridlines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 
-  <header class="bar" id="bar">
-    <a class="mark" href="#top" aria-label="Top">
-      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M5 16h22M16 5v22" stroke="currentColor" stroke-width=".8"/><circle cx="16" cy="16" r="3.2" fill="var(--signal)"/></svg>
-      <span>B · P</span>
-    </a>
-    <div class="coords mono" id="coords" aria-hidden="true">50.1109° N · 8.6821° E</div>
+  <header class="bar">
+    <a class="mark" href="#top"><b>BP</b><span>Atlas of Work · Nº 11/2026</span></a>
     <div class="bar-right">
-      <div class="seg" role="group" aria-label="Language">
-        <button data-lang="en">EN</button><button data-lang="de">DE</button><button data-lang="tr">TR</button>
-      </div>
-      <div class="seg mode" role="group" aria-label="Mode">
-        <a href="index.html" aria-current="page" data-i18n="nav.atlas">Atlas</a><a href="cv.html" data-keep-lang data-i18n="nav.cv">CV</a>
-      </div>
+      <div class="seg" role="group" aria-label="Language"><button data-lang="en">EN</button><button data-lang="de">DE</button><button data-lang="tr">TR</button></div>
+      <a class="cvlink" href="cv.html" data-keep-lang data-i18n="nav.cv">CV</a>
     </div>
   </header>
 
-  <nav class="plates" aria-label="Sections">
-    <a href="#top"><b>00</b></a>
-    <a href="#itinerary"><b>01</b><span data-i18n="nav.itinerary">Itinerary</span></a>
-    <a href="#layers"><b>02</b><span data-i18n="nav.layers">Layers</span></a>
-    <a href="#works"><b>03</b><span data-i18n="nav.works">Works</span></a>
-    <a href="#lab"><b>04</b><span data-i18n="nav.lab">Lab</span></a>
-    <a href="#index"><b>05</b><span data-i18n="nav.index">Index</span></a>
-    <a href="#contact"><b>06</b><span data-i18n="nav.contact">Contact</span></a>
-  </nav>
-
   <main>
-    <!-- 00 HERO -->
+    <!-- 00 — MASTHEAD (Neue Grafik: one cover, three languages) -->
     <section class="hero" id="top">
-      <canvas id="field" aria-hidden="true"></canvas>
-      <div class="hero-inner">
-        <p class="kicker mono" data-i18n="hero.kicker">An atlas of work — Plate 00</p>
-        <h1 class="name"><span class="l1">Baris</span><span class="l2">Parlatangiller</span></h1>
-        <p class="role" data-i18n="hero.role">Senior GIS &amp; Spatial Analyst · Urban &amp; Regional Planner</p>
-        <p class="lede" data-i18n="hero.lede"></p>
-        <div class="cta">
-          <a class="btn btn-ink" href="#itinerary" data-i18n="hero.cta.explore">Explore the atlas</a>
-          <a class="btn btn-line" href="cv.html" data-keep-lang data-i18n="hero.cta.cv">Read the 30-second CV</a>
+      <div class="g12">
+        <h1 class="mast"><span>Baris</span><span>Parlatangiller</span></h1>
+
+        <div class="tri">
+          <p lang="en"><b>Spatial analyst and urban planner.</b> Maps, models and masterplans for cities in Germany, Türkiye, the Gulf and the Caucasus. Based in Frankfurt am Main.</p>
+          <p lang="de"><b>Raumanalytiker und Stadtplaner.</b> Karten, Modelle und Masterpläne für Städte in Deutschland, der Türkei, am Golf und im Kaukasus. Sitz in Frankfurt am Main.</p>
+          <p lang="tr"><b>Mekânsal analist ve şehir plancısı.</b> Almanya, Türkiye, Körfez ve Kafkasya'daki şehirler için haritalar, modeller ve master planlar. Frankfurt am Main'de.</p>
         </div>
+
+        <aside class="numeral">
+          <div class="n">8</div>
+          <p class="mono">Years · Jahre · Yıl</p>
+          <dl class="kv" id="stats"></dl>
+        </aside>
+
+        <figure class="fig1">
+          <canvas id="field" aria-label="Interactive halftone heat map where the cursor casts shade"></canvas>
+          <figcaption>
+            <span class="mono fig-title" data-i18n="fig.title"></span>
+            <span class="mono fig-sun" id="sunline"></span>
+          </figcaption>
+        </figure>
+
+        <nav class="toc" aria-label="Contents">
+          <div lang="en"><p class="mono">Contents</p><ol>
+            <li><a href="#route">Route</a></li><li><a href="#layers">Layers</a></li><li><a href="#works">Works</a></li><li><a href="#lab">Laboratory</a></li><li><a href="#index">Index</a></li><li><a href="#contact">Contact</a></li></ol></div>
+          <div lang="de"><p class="mono">Inhalt</p><ol>
+            <li><a href="#route">Route</a></li><li><a href="#layers">Ebenen</a></li><li><a href="#works">Arbeiten</a></li><li><a href="#lab">Labor</a></li><li><a href="#index">Verzeichnis</a></li><li><a href="#contact">Kontakt</a></li></ol></div>
+          <div lang="tr"><p class="mono">İçindekiler</p><ol>
+            <li><a href="#route">Rota</a></li><li><a href="#layers">Katmanlar</a></li><li><a href="#works">İşler</a></li><li><a href="#lab">Laboratuvar</a></li><li><a href="#index">Dizin</a></li><li><a href="#contact">İletişim</a></li></ol></div>
+        </nav>
       </div>
-      <dl class="stats" id="stats"></dl>
-      <a class="scrollcue mono" href="#itinerary"><span data-i18n="hero.scroll">Scroll</span> ↓</a>
     </section>
 
-    <!-- 01 ITINERARY -->
-    <section class="sec" id="itinerary">
-      <header class="sec-head">
-        <p class="kicker mono" data-i18n="it.kicker"></p>
-        <h2 data-i18n="it.title"></h2>
-        <p class="sec-lede" data-i18n="it.lede"></p>
-      </header>
+    <!-- POWERS OF TEN — pinned zoom from 1:1 000 000 to 1:1 -->
+    <section class="scale" id="scale" aria-label="From region to square metre">
+      <div class="scale-pin">
+        <canvas id="zoom" aria-hidden="true"></canvas>
+        <div class="scale-hud">
+          <p class="mono scale-kick" data-i18n="sc.kicker"></p>
+          <div class="scale-ratio"><span id="ratio">1 : 1 000 000</span><small data-i18n="sc.scale"></small></div>
+          <div class="scale-says" id="says"></div>
+          <div class="scale-ticks" id="ticks"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 — ROUTE (black) -->
+    <section class="sec ink" id="route">
+      <span class="vlabel" aria-hidden="true">Route · Route · Rota</span>
+      <header class="sh"><span class="sh-no">01</span><h2 data-i18n="it.title"></h2><p class="sh-lede" data-i18n="it.lede"></p></header>
       <div class="it-grid">
         <figure class="it-map"><svg id="routeMap" viewBox="0 0 1000 760" role="img" aria-label="Map of career locations"></svg></figure>
         <article class="it-detail" id="itDetail" aria-live="polite"></article>
@@ -76,30 +89,24 @@
       <div class="gantt" id="gantt" role="list"></div>
     </section>
 
-    <!-- 02 LAYERS -->
+    <!-- 02 — LAYERS (concrete) -->
     <section class="sec" id="layers">
-      <header class="sec-head">
-        <p class="kicker mono" data-i18n="ly.kicker"></p>
-        <h2 data-i18n="ly.title"></h2>
-        <p class="sec-lede" data-i18n="ly.lede"></p>
-      </header>
+      <span class="vlabel" aria-hidden="true">Layers · Ebenen · Katmanlar</span>
+      <header class="sh"><span class="sh-no">02</span><h2 data-i18n="ly.title"></h2><p class="sh-lede" data-i18n="ly.lede"></p></header>
       <div class="ly-grid">
         <aside class="ly-panel">
           <div class="ly-panel-head mono"><span data-i18n="ly.panel"></span>
-            <span><button class="link" id="lyAll" data-i18n="ly.all"></button> / <button class="link" id="lyNone" data-i18n="ly.none"></button></span>
-          </div>
+            <span><button class="link" id="lyAll" data-i18n="ly.all"></button> / <button class="link" id="lyNone" data-i18n="ly.none"></button></span></div>
           <ul id="layerList"></ul>
         </aside>
         <div class="ly-matrix" id="matrix"></div>
       </div>
     </section>
 
-    <!-- 03 WORKS -->
-    <section class="sec" id="works">
-      <header class="sec-head">
-        <p class="kicker mono" data-i18n="wk.kicker"></p>
-        <h2 data-i18n="wk.title"></h2>
-      </header>
+    <!-- 03 — WORKS (white) -->
+    <section class="sec paper" id="works">
+      <span class="vlabel" aria-hidden="true">Works · Arbeiten · İşler</span>
+      <header class="sh"><span class="sh-no">03</span><h2 data-i18n="wk.title"></h2></header>
       <div id="featured"></div>
       <h3 class="sub mono" data-i18n="wk.more"></h3>
       <div class="more" id="moreWorks"></div>
@@ -107,13 +114,19 @@
       <ol class="awards" id="awards"></ol>
     </section>
 
-    <!-- 04 LAB (dark) -->
-    <div class="lab-wrap" id="labWrap"><section class="sec lab" id="lab">
-      <header class="sec-head">
-        <p class="kicker mono" data-i18n="lab.kicker"></p>
-        <h2 data-i18n="lab.title"></h2>
-        <p class="sec-lede" data-i18n="lab.lede"></p>
-      </header>
+    <!-- FOLIO — pinned horizontal gallery of the 2026 portfolio -->
+    <section class="folio" id="folio">
+      <div class="folio-pin">
+        <header class="folio-head"><span class="mono" data-i18n="fo.kicker"></span><h2 data-i18n="fo.title"></h2><span class="mono folio-hint" data-i18n="fo.hint"></span></header>
+        <div class="folio-track" id="folioTrack"></div>
+        <div class="folio-bar"><i id="folioBar"></i></div>
+      </div>
+    </section>
+
+    <!-- 04 — LAB (black) -->
+    <section class="sec ink" id="lab">
+      <span class="vlabel" aria-hidden="true">Laboratory · Labor · Laboratuvar</span>
+      <header class="sh"><span class="sh-no">04</span><h2 data-i18n="lab.title"></h2><p class="sh-lede" data-i18n="lab.lede"></p></header>
       <div class="lab-grid">
         <div class="lab-stage">
           <canvas id="plaza" aria-label="Interactive plaza heat model"></canvas>
@@ -121,11 +134,11 @@
         </div>
         <aside class="lab-side">
           <div class="tools" role="radiogroup" id="tools">
-            <button data-tool="tree" aria-checked="true" role="radio"><i style="background:#3E7C4F"></i><span data-i18n="lab.tool.tree"></span></button>
+            <button data-tool="tree" aria-checked="true" role="radio"><i style="background:#2F6B43"></i><span data-i18n="lab.tool.tree"></span></button>
             <button data-tool="water" role="radio"><i style="background:#3B7EA1"></i><span data-i18n="lab.tool.water"></span></button>
             <button data-tool="grass" role="radio"><i style="background:#8FB36A"></i><span data-i18n="lab.tool.grass"></span></button>
-            <button data-tool="sail" role="radio"><i style="background:#E8E2D0"></i><span data-i18n="lab.tool.sail"></span></button>
-            <button data-tool="paving" role="radio"><i style="background:#B9B2A3"></i><span data-i18n="lab.tool.paving"></span></button>
+            <button data-tool="sail" role="radio"><i style="background:#E8E8E3"></i><span data-i18n="lab.tool.sail"></span></button>
+            <button data-tool="paving" role="radio"><i style="background:#9A9A94"></i><span data-i18n="lab.tool.paving"></span></button>
           </div>
           <dl class="readout">
             <div><dt class="mono" data-i18n="lab.mean"></dt><dd id="rMean">–</dd></div>
@@ -134,20 +147,18 @@
             <div><dt class="mono" data-i18n="lab.delta"></dt><dd id="rDelta">–</dd></div>
           </dl>
           <div class="lab-actions">
-            <button class="btn btn-paper" id="labGreen" data-i18n="lab.green"></button>
+            <button class="btn btn-klein" id="labGreen" data-i18n="lab.green"></button>
             <button class="btn btn-ghost" id="labReset" data-i18n="lab.reset"></button>
           </div>
           <p class="lab-note"><span data-i18n="lab.note"></span> <a id="labLink" target="_blank" rel="noopener" data-i18n="lab.notelink"></a> ↗</p>
         </aside>
       </div>
-    </section></div>
+    </section>
 
-    <!-- 05 INDEX -->
+    <!-- 05 — INDEX (concrete) -->
     <section class="sec" id="index">
-      <header class="sec-head">
-        <p class="kicker mono" data-i18n="ix.kicker"></p>
-        <h2 data-i18n="ix.title"></h2>
-      </header>
+      <span class="vlabel" aria-hidden="true">Index · Verzeichnis · Dizin</span>
+      <header class="sh"><span class="sh-no">05</span><h2 data-i18n="ix.title"></h2></header>
       <div class="ix-controls">
         <div class="chips" id="ixChips">
           <button data-kind="all" aria-pressed="true" data-i18n="ix.all"></button>
@@ -165,17 +176,36 @@
       </div>
     </section>
 
-    <!-- 06 CONTACT -->
-    <section class="sec contact" id="contact">
-      <p class="kicker mono" data-i18n="ct.kicker"></p>
+    <!-- 06 — CONTACT (Klein blue) -->
+    <section class="sec klein" id="contact">
+      <span class="vlabel" aria-hidden="true">Contact · Kontakt · İletişim</span>
+      <header class="sh"><span class="sh-no">06</span></header>
       <h2 class="big" data-i18n="ct.title"></h2>
-      <p class="sec-lede" data-i18n="ct.lede"></p>
+      <p class="sh-lede" data-i18n="ct.lede"></p>
       <ul class="ct-links" id="ctLinks"></ul>
     </section>
   </main>
 
+  <dialog class="viewer" id="viewer" aria-label="Project board">
+    <div class="vw-stage" id="vwStage"><img id="vwImg" alt="" draggable="false"></div>
+    <aside class="vw-side">
+      <p class="mono" id="vwMeta"></p>
+      <h3 id="vwTitle"></h3>
+      <p id="vwText"></p>
+      <div class="vw-ctl">
+        <button class="btn btn-klein" id="vwPrev" aria-label="Previous">←</button>
+        <button class="btn btn-klein" id="vwNext" aria-label="Next">→</button>
+        <button class="btn btn-ghost" id="vwFit" data-i18n="vw.fit"></button>
+        <button class="btn btn-ghost" id="vwClose" data-i18n="vw.close"></button>
+      </div>
+      <p class="mono vw-hint" data-i18n="vw.hint"></p>
+      <div class="vw-scale mono"><i></i><span id="vwZoom">100%</span></div>
+    </aside>
+  </dialog>
+
   <footer class="foot mono">
     <span data-i18n="ft.built"></span>
+    <span data-i18n="ft.grid"></span>
     <span data-i18n="ft.code"></span>
     <span>50.1109° N · 8.6821° E</span>
   </footer>
@@ -183,9 +213,12 @@
   <script src="data/ui.js"></script>
   <script src="data/content.js"></script>
   <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/sun.js"></script>
   <script src="assets/js/field.js"></script>
   <script src="assets/js/plates.js"></script>
   <script src="assets/js/lab.js"></script>
+  <script src="assets/js/viewer.js"></script>
+  <script src="assets/js/scroll.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>

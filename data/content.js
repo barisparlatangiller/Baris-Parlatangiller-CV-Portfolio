@@ -21,9 +21,9 @@ window.ATLAS = {
     gis: {
       label: { en: "GIS & Geospatial", de: "GIS & Geodaten", tr: "CBS & Mekânsal Analiz" },
       headline: {
-        en: "Senior GIS & Geospatial Analyst — spatial analytics for planning, infrastructure and environmental decisions",
-        de: "Senior GIS- & Geodatenanalyst — räumliche Analytik für Planungs-, Infrastruktur- und Umweltentscheidungen",
-        tr: "Kıdemli CBS ve Mekânsal Analist — planlama, altyapı ve çevre kararları için mekânsal analitik"
+        en: "Senior GIS and Geospatial Analyst. Spatial analytics for planning, infrastructure and environmental decisions.",
+        de: "Senior GIS- und Geodatenanalyst. Räumliche Analytik für Entscheidungen in Planung, Infrastruktur und Umwelt.",
+        tr: "Kıdemli CBS ve Mekânsal Analist. Planlama, altyapı ve çevre kararları için mekânsal analitik."
       },
       profile: {
         en: [
@@ -53,9 +53,9 @@ window.ATLAS = {
     plan: {
       label: { en: "Urban & Regional Planning", de: "Stadt- & Regionalplanung", tr: "Şehir ve Bölge Planlama" },
       headline: {
-        en: "Senior Urban & Regional Planner — masterplanning, mobility, infrastructure and climate-resilient strategy",
-        de: "Senior Stadt- & Regionalplaner — Masterplanung, Mobilität, Infrastruktur und klimaresiliente Strategien",
-        tr: "Kıdemli Şehir ve Bölge Plancısı — master plan, ulaşım, altyapı ve iklime dirençli strateji"
+        en: "Senior Urban and Regional Planner. Masterplanning, mobility, infrastructure and climate resilient strategy.",
+        de: "Senior Stadt- und Regionalplaner. Masterplanung, Mobilität, Infrastruktur und klimaresiliente Strategien.",
+        tr: "Kıdemli Şehir ve Bölge Plancısı. Master plan, ulaşım, altyapı ve iklime dirençli strateji."
       },
       profile: {
         en: [
@@ -101,27 +101,27 @@ window.ATLAS = {
 
   /* Skill "layers" — toggled like a GIS layer panel. */
   layers: [
-    { id: "spatial", color: "#E4572E",
+    { id: "spatial", color: "#1F3BFF",
       name: { en: "Spatial Analysis", de: "Räumliche Analyse", tr: "Mekânsal Analiz" },
       desc: { en: "Accessibility, catchments, suitability and multi-criteria models.", de: "Erreichbarkeit, Einzugsbereiche, Eignungs- und Multikriterienmodelle.", tr: "Erişilebilirlik, etki alanı, uygunluk ve çok kriterli modeller." },
       tools: "ArcGIS Pro · QGIS · network analysis · MCA" },
-    { id: "climate", color: "#C9302C",
+    { id: "climate", color: "#0A0A0A",
       name: { en: "Remote Sensing & Climate", de: "Fernerkundung & Klima", tr: "Uzaktan Algılama ve İklim" },
       desc: { en: "Urban heat, flood and ecological risk from satellite and model data.", de: "Stadtklima, Hochwasser- und Ökorisiken aus Satelliten- und Modelldaten.", tr: "Uydu ve model verisiyle kentsel ısı, taşkın ve ekolojik risk." },
       tools: "SOLWEIG / UMEP · Landsat / Sentinel · GeoAI" },
-    { id: "data", color: "#2F5D8A",
+    { id: "data", color: "#8A8A84",
       name: { en: "Geodata Engineering", de: "Geodaten-Engineering", tr: "Mekânsal Veri Mühendisliği" },
       desc: { en: "Geodatabases, standards and QA/QC that whole departments rely on.", de: "Geodatenbanken, Standards und QA/QC, auf die ganze Abteilungen bauen.", tr: "Tüm birimlerin dayandığı coğrafi veritabanları, standartlar ve QA/QC." },
       tools: "File / enterprise GDB · SQL · raster & vector pipelines" },
-    { id: "code", color: "#3E7C6B",
+    { id: "code", color: "#0B1A8C",
       name: { en: "Automation & Code", de: "Automatisierung & Code", tr: "Otomasyon ve Kod" },
       desc: { en: "Python geoprocessing, web maps and AI-assisted development.", de: "Python-Geoprozessierung, Webkarten und KI-gestützte Entwicklung.", tr: "Python coğrafi işlem, web haritaları ve yapay zekâ destekli geliştirme." },
       tools: "Python · GeoPandas · Rasterio · Leaflet · GitHub Pages" },
-    { id: "plan", color: "#8A6D3B",
+    { id: "plan", color: "#7B8CFF",
       name: { en: "Planning & Strategy", de: "Planung & Strategie", tr: "Planlama ve Strateji" },
       desc: { en: "Masterplans, regional strategies, TOD and growth scenarios.", de: "Masterpläne, Regionalstrategien, TOD und Wachstumsszenarien.", tr: "Master planlar, bölgesel stratejiler, TOD ve büyüme senaryoları." },
       tools: "Masterplanning · projections · scenario testing" },
-    { id: "comm", color: "#5B5B57",
+    { id: "comm", color: "#C2C2BC",
       name: { en: "Cartography & Communication", de: "Kartografie & Kommunikation", tr: "Kartografya ve İletişim" },
       desc: { en: "Map books, dashboards, workshops and training for non-specialists.", de: "Kartenwerke, Dashboards, Workshops und Schulungen für Nicht-Fachleute.", tr: "Harita kitapları, paneller, çalıştaylar ve uzman olmayanlara eğitim." },
       tools: "Layouts · Adobe CC · dashboards · training" }
@@ -137,17 +137,17 @@ window.ATLAS = {
       places: ["frankfurt"], layers: ["spatial", "climate", "code", "plan", "comm"],
       bullets: {
         en: [
-          "Build GIS models for multi-criteria assessment and scenario testing — earthquake resilience, 15-minute-city accessibility, solar potential and agricultural capacity across 35+ districts and 13 municipalities.",
+          "Build GIS models for multi-criteria assessment and scenario testing, covering earthquake resilience, 15-minute-city accessibility, solar potential and agricultural capacity across 35+ districts and 13 municipalities.",
           "Automate repetitive geoprocessing in Python, cutting manual GIS production time by roughly 60%.",
           "Publish an open-data mapping portfolio on GitHub Pages, including a 1 m-resolution urban heat stress simulation for central Frankfurt squares."
         ],
         de: [
-          "Entwicklung von GIS-Modellen für Multikriterienbewertung und Szenariotests — Erdbebenresilienz, 15-Minuten-Stadt, Solarpotenzial und landwirtschaftliche Kapazität in 35+ Bezirken und 13 Kommunen.",
-          "Automatisierung wiederkehrender Geoprozesse in Python — rund 60 % weniger manuelle GIS-Produktionszeit.",
+          "Entwicklung von GIS-Modellen für Multikriterienbewertung und Szenariotests, darunter Erdbebenresilienz, 15-Minuten-Stadt, Solarpotenzial und landwirtschaftliche Kapazität in 35+ Bezirken und 13 Kommunen.",
+          "Automatisierung wiederkehrender Geoprozesse in Python, wodurch die manuelle GIS-Produktion rund 60 % schneller wurde.",
           "Veröffentlichung eines Open-Data-Kartenportfolios auf GitHub Pages, inklusive einer Hitzestress-Simulation in 1 m Auflösung für Frankfurter Innenstadtplätze."
         ],
         tr: [
-          "Çok kriterli değerlendirme ve senaryo testleri için CBS modelleri — 35+ ilçe ve 13 belediyede deprem dirençliliği, 15 dakikalık şehir erişilebilirliği, güneş potansiyeli ve tarımsal kapasite.",
+          "Çok kriterli değerlendirme ve senaryo testleri için CBS modelleri; 35+ ilçe ve 13 belediyede deprem dirençliliği, 15 dakikalık şehir erişilebilirliği, güneş potansiyeli ve tarımsal kapasite.",
           "Tekrarlayan coğrafi işlemleri Python ile otomatikleştirerek manuel CBS üretim süresini yaklaşık %60 azaltma.",
           "Frankfurt merkez meydanları için 1 m çözünürlüklü kentsel ısı stresi simülasyonu dahil, GitHub Pages üzerinde açık veri harita portfolyosu yayınlama."
         ]
@@ -157,7 +157,7 @@ window.ATLAS = {
       id: "mgk", start: "2024-10", end: "2025-05",
       org: { en: "Mahl Gebhard Konzepte", de: "Mahl Gebhard Konzepte", tr: "Mahl Gebhard Konzepte" },
       city: { en: "Munich, Germany", de: "München, Deutschland", tr: "Münih, Almanya" },
-      role: { en: "Senior GIS Expert – Urban Planner", de: "Senior GIS-Experte – Stadtplaner", tr: "Kıdemli CBS Uzmanı – Şehir Plancısı" },
+      role: { en: "Senior GIS Expert and Urban Planner", de: "Senior GIS-Experte und Stadtplaner", tr: "Kıdemli CBS Uzmanı ve Şehir Plancısı" },
       places: ["munich"], layers: ["climate", "data", "spatial", "comm"],
       bullets: {
         en: [
@@ -181,21 +181,21 @@ window.ATLAS = {
       id: "asp3", start: "2023-09", end: "2024-09",
       org: { en: "Albert Speer + Partner", de: "Albert Speer + Partner", tr: "Albert Speer + Partner" },
       city: { en: "Frankfurt & international", de: "Frankfurt & international", tr: "Frankfurt ve uluslararası" },
-      role: { en: "Team Lead – GIS & Regional / Urban Planning", de: "Teamleiter – GIS & Regional- / Stadtplanung", tr: "Ekip Lideri – CBS ve Bölge / Şehir Planlama" },
+      role: { en: "Team Lead, GIS and Urban Planning", de: "Teamleiter GIS und Stadtplanung", tr: "Ekip Lideri, CBS ve Şehir Planlama" },
       places: ["frankfurt", "riyadh", "muscat", "doha"], layers: ["plan", "comm", "spatial", "data"],
       bullets: {
         en: [
-          "Managed a cross-functional GIS & urban planning team across multiple international projects — task allocation, meetings and delivery schedules.",
+          "Managed a cross-functional GIS & urban planning team across multiple international projects, from task allocation to meetings and delivery schedules.",
           "Led or co-led strategy chapters, maps, dashboards, station-area studies and GIS technical reports.",
           "Represented the team in client meetings and delivered GIS and planning training for client stakeholders."
         ],
         de: [
-          "Leitung eines interdisziplinären GIS- und Stadtplanungsteams über mehrere internationale Projekte — Aufgabenverteilung, Meetings und Lieferpläne.",
+          "Leitung eines interdisziplinären GIS- und Stadtplanungsteams über mehrere internationale Projekte, von der Aufgabenverteilung bis zu Meetings und Lieferplänen.",
           "(Mit-)Verantwortung für Strategiekapitel, Karten, Dashboards, Bahnhofsumfeldstudien und GIS-Fachberichte.",
           "Vertretung des Teams in Kundenterminen und GIS-/Planungsschulungen für Stakeholder des Auftraggebers."
         ],
         tr: [
-          "Birden fazla uluslararası projede disiplinler arası CBS ve şehir planlama ekibini yönetme — görev dağılımı, toplantılar ve teslim takvimleri.",
+          "Birden fazla uluslararası projede disiplinler arası CBS ve şehir planlama ekibini görev dağılımından toplantılara ve teslim takvimlerine kadar yönetme.",
           "Strateji bölümleri, haritalar, paneller, istasyon çevresi çalışmaları ve CBS teknik raporlarını yürütme veya ortak yürütme.",
           "Müşteri toplantılarında ekibi temsil etme ve müşteri paydaşlarına CBS/planlama eğitimleri verme."
         ]
@@ -205,7 +205,7 @@ window.ATLAS = {
       id: "asp2", start: "2022-06", end: "2023-08",
       org: { en: "Albert Speer + Partner", de: "Albert Speer + Partner", tr: "Albert Speer + Partner" },
       city: { en: "Frankfurt & international", de: "Frankfurt & international", tr: "Frankfurt ve uluslararası" },
-      role: { en: "GIS Specialist – Regional & Urban Planner", de: "GIS-Spezialist – Regional- & Stadtplaner", tr: "CBS Uzmanı – Bölge ve Şehir Plancısı" },
+      role: { en: "GIS Specialist and Regional Planner", de: "GIS-Spezialist und Regionalplaner", tr: "CBS Uzmanı ve Bölge Plancısı" },
       places: ["frankfurt", "muscat", "riyadh", "baku", "tbilisi", "doha"], layers: ["spatial", "plan", "data", "comm"],
       bullets: {
         en: [
@@ -229,7 +229,7 @@ window.ATLAS = {
       id: "konak", start: "2021-10", end: "2022-05",
       org: { en: "Municipality of Konak", de: "Stadtverwaltung Konak", tr: "Konak Belediyesi" },
       city: { en: "İzmir, Türkiye", de: "İzmir, Türkei", tr: "İzmir, Türkiye" },
-      role: { en: "GIS Analyst – Regional & Urban Planner", de: "GIS-Analyst – Regional- & Stadtplaner", tr: "CBS Analisti – Bölge ve Şehir Plancısı" },
+      role: { en: "GIS Analyst and Regional Planner", de: "GIS-Analyst und Regionalplaner", tr: "CBS Analisti ve Bölge Plancısı" },
       places: ["izmir"], layers: ["data", "spatial", "plan"],
       bullets: {
         en: [
@@ -250,7 +250,7 @@ window.ATLAS = {
       id: "sinir", start: "2021-01", end: "2021-09",
       org: { en: "SINIR Planning Ltd.", de: "SINIR Planning Ltd.", tr: "SINIR Planlama Ltd." },
       city: { en: "İzmir, Türkiye", de: "İzmir, Türkei", tr: "İzmir, Türkiye" },
-      role: { en: "Project Manager – Urban Planning & GIS", de: "Projektleiter – Stadtplanung & GIS", tr: "Proje Yöneticisi – Şehir Planlama ve CBS" },
+      role: { en: "Project Manager, Urban Planning and GIS", de: "Projektleiter Stadtplanung und GIS", tr: "Proje Yöneticisi, Şehir Planlama ve CBS" },
       places: ["izmir"], layers: ["plan", "spatial", "comm"],
       bullets: {
         en: [
@@ -271,7 +271,7 @@ window.ATLAS = {
       id: "asp1", start: "2019-09", end: "2020-12",
       org: { en: "Albert Speer + Partner", de: "Albert Speer + Partner", tr: "Albert Speer + Partner" },
       city: { en: "Frankfurt & international", de: "Frankfurt & international", tr: "Frankfurt ve uluslararası" },
-      role: { en: "GIS Analyst – Regional & Urban Planner", de: "GIS-Analyst – Regional- & Stadtplaner", tr: "CBS Analisti – Bölge ve Şehir Plancısı" },
+      role: { en: "GIS Analyst and Regional Planner", de: "GIS-Analyst und Regionalplaner", tr: "CBS Analisti ve Bölge Plancısı" },
       places: ["frankfurt", "baku"], layers: ["data", "spatial", "plan", "comm"],
       bullets: {
         en: [
@@ -323,11 +323,11 @@ window.ATLAS = {
   ],
 
   awards: [
-    { title: { en: "ISOCARP Award — Baku 2040 Masterplan", de: "ISOCARP Award — Masterplan Baku 2040", tr: "ISOCARP Ödülü — Bakü 2040 Master Planı" } },
-    { title: { en: "1st Prize — Bodrum Urban Design Project", de: "1. Preis — Städtebauprojekt Bodrum", tr: "Birincilik — Bodrum Kentsel Tasarım Projesi" } },
-    { title: { en: "2nd Prize — Design Your Neighborhood 2025", de: "2. Preis — Design Your Neighborhood 2025", tr: "İkincilik — Design Your Neighborhood 2025" } },
-    { title: { en: "Finalist — Reimagine Elbphilharmonie", de: "Finalist — Reimagine Elbphilharmonie", tr: "Finalist — Reimagine Elbphilharmonie" } },
-    { title: { en: "Finalist — Eliava Bazaar Project", de: "Finalist — Eliava Bazaar Project", tr: "Finalist — Eliava Bazaar Projesi" } }
+    { title: { en: "ISOCARP Award for the Baku 2040 Masterplan", de: "ISOCARP Award für den Masterplan Baku 2040", tr: "Bakü 2040 Master Planı ile ISOCARP Ödülü" } },
+    { title: { en: "First prize in the Bodrum Urban Design Project", de: "1. Preis im Städtebauprojekt Bodrum", tr: "Bodrum Kentsel Tasarım Projesi'nde birincilik" } },
+    { title: { en: "Second prize at Design Your Neighborhood 2025", de: "2. Preis bei Design Your Neighborhood 2025", tr: "Design Your Neighborhood 2025'te ikincilik" } },
+    { title: { en: "Finalist in Reimagine Elbphilharmonie", de: "Finalist bei Reimagine Elbphilharmonie", tr: "Reimagine Elbphilharmonie finalisti" } },
+    { title: { en: "Finalist in the Eliava Bazaar Project", de: "Finalist beim Eliava Bazaar Project", tr: "Eliava Bazaar Projesi finalisti" } }
   ],
 
   /* Selected works — editorial case studies. `plate` picks the generative artwork.
@@ -336,10 +336,10 @@ window.ATLAS = {
     {
       id: "uhi", featured: true, plate: "heat", year: "2026", place: "Frankfurt am Main",
       kicker: { en: "Independent research · Urban climate", de: "Eigene Forschung · Stadtklima", tr: "Bağımsız araştırma · Kent iklimi" },
-      title: { en: "Urban Heat Stress — Frankfurt Platz", de: "Hitzestress — Frankfurter Plätze", tr: "Kentsel Isı Stresi — Frankfurt Meydanları" },
-      question: { en: "How hot do Frankfurt's central squares really get — metre by metre — and where should design intervene first?", de: "Wie heiß werden Frankfurts Innenstadtplätze wirklich — Meter für Meter — und wo sollte Gestaltung zuerst ansetzen?", tr: "Frankfurt'un merkez meydanları metre metre gerçekte ne kadar ısınıyor ve tasarım önce nereye müdahale etmeli?" },
+      title: { en: "Urban Heat Stress in Frankfurt's Squares", de: "Hitzestress auf Frankfurter Plätzen", tr: "Frankfurt Meydanlarında Kentsel Isı Stresi" },
+      question: { en: "How hot do Frankfurt's central squares really get, metre by metre, and where should design intervene first?", de: "Wie heiß werden Frankfurts Innenstadtplätze wirklich, Meter für Meter, und wo sollte Gestaltung zuerst ansetzen?", tr: "Frankfurt'un merkez meydanları metre metre gerçekte ne kadar ısınıyor ve tasarım önce nereye müdahale etmeli?" },
       method: { en: "1 m mean-radiant-temperature and heat-stress modelling (SOLWEIG) built from open elevation, building and vegetation data, published as an interactive web map.", de: "Modellierung von mittlerer Strahlungstemperatur und Hitzestress in 1 m (SOLWEIG) aus offenen Höhen-, Gebäude- und Vegetationsdaten, veröffentlicht als interaktive Webkarte.", tr: "Açık yükseklik, bina ve bitki örtüsü verisinden 1 m çözünürlükte ortalama radyant sıcaklık ve ısı stresi modellemesi (SOLWEIG); interaktif web haritası olarak yayınlandı." },
-      outcome: { en: "A public, square-by-square heat atlas meant to complement city-scale climate maps. Part 2 — design scenarios for the hottest squares — is in progress. Model-based; not yet field-validated.", de: "Ein öffentlicher Hitzeatlas Platz für Platz als Ergänzung zu stadtweiten Klimakarten. Teil 2 — Gestaltungsszenarien für die heißesten Plätze — ist in Arbeit. Modellbasiert, noch nicht durch Messungen validiert.", tr: "Kent ölçeğindeki iklim haritalarını tamamlamayı amaçlayan, meydan meydan açık bir ısı atlası. 2. Bölüm — en sıcak meydanlar için tasarım senaryoları — devam ediyor. Model tabanlı; henüz saha ölçümüyle doğrulanmadı." },
+      outcome: { en: "A public, square-by-square heat atlas meant to complement city-scale climate maps. Part two, with design scenarios for the hottest squares, is in progress. The results are model based and have not yet been validated in the field.", de: "Ein öffentlicher Hitzeatlas Platz für Platz als Ergänzung zu stadtweiten Klimakarten. Der zweite Teil mit Gestaltungsszenarien für die heißesten Plätze ist in Arbeit. Die Ergebnisse beruhen auf einem Modell und sind noch nicht durch Messungen bestätigt.", tr: "Kent ölçeğindeki iklim haritalarını tamamlamayı amaçlayan, meydan meydan açık bir ısı atlası. En sıcak meydanlar için tasarım senaryolarını içeren ikinci bölüm üzerinde çalışıyorum. Sonuçlar modele dayanıyor ve henüz saha ölçümüyle doğrulanmadı." },
       tools: ["Python", "SOLWEIG / UMEP", "QGIS", "Leaflet"], layers: ["climate", "spatial", "code", "comm"],
       link: "https://barisparlatangiller.github.io/Urban-Heat-Stress---Frankfurt-Platz/",
       repo: "https://github.com/barisparlatangiller/Urban-Heat-Stress---Frankfurt-Platz"
@@ -347,21 +347,12 @@ window.ATLAS = {
     {
       id: "30dmc", featured: true, plate: "calendar", year: "2026", place: { en: "Germany & beyond", de: "Deutschland & darüber hinaus", tr: "Almanya ve ötesi" },
       kicker: { en: "Open-data map series", de: "Open-Data-Kartenserie", tr: "Açık veri harita serisi" },
-      title: { en: "#30DayMapChallenge 2026 — Heat & Housing", de: "#30DayMapChallenge 2026 — Hitze & Wohnen", tr: "#30DayMapChallenge 2026 — Isı ve Konut" },
+      title: { en: "#30DayMapChallenge 2026: Heat and Housing", de: "#30DayMapChallenge 2026: Hitze und Wohnen", tr: "#30DayMapChallenge 2026: Isı ve Konut" },
       question: { en: "Can 30 small, rigorous maps make the housing crisis and urban heat in Germany's largest cities legible to everyone?", de: "Können 30 kleine, saubere Karten Wohnungskrise und Stadthitze in Deutschlands größten Städten für alle lesbar machen?", tr: "30 küçük ama titiz harita, Almanya'nın en büyük şehirlerindeki konut krizini ve kentsel ısıyı herkes için okunur kılabilir mi?" },
       method: { en: "One day, one theme, one city. Every map is its own public repository and live GitHub Pages site, built from QGIS-loadable open data with an AI-assisted pipeline.", de: "Ein Tag, ein Thema, eine Stadt. Jede Karte ist ein eigenes öffentliches Repository mit Live-Seite auf GitHub Pages, gebaut aus offenen, QGIS-tauglichen Daten mit KI-gestützter Pipeline.", tr: "Bir gün, bir tema, bir şehir. Her harita kendi açık deposu ve canlı GitHub Pages sitesi; QGIS'e yüklenebilir açık veriler ve yapay zekâ destekli bir iş akışıyla üretildi." },
-      outcome: { en: "A growing public archive of interactive maps — rents, canopy heat, land value, high-rise shadows and more. See the full index below.", de: "Ein wachsendes öffentliches Archiv interaktiver Karten — Mieten, Kronendach-Hitze, Bodenwerte, Hochhausschatten und mehr. Vollständiger Index unten.", tr: "Kira, ağaç örtüsü ve ısı, arsa değeri, yüksek bina gölgeleri ve daha fazlasını içeren, büyüyen açık bir interaktif harita arşivi. Tam liste aşağıda." },
+      outcome: { en: "A growing public archive of interactive maps about rents, canopy heat, land value, high-rise shadows and much more. The full list is in the index below.", de: "Ein wachsendes öffentliches Archiv interaktiver Karten über Mieten, Hitze unter Baumkronen, Bodenwerte, Hochhausschatten und vieles mehr. Die vollständige Liste steht unten im Verzeichnis.", tr: "Kira, ağaç örtüsü ve ısı, arsa değeri, yüksek bina gölgeleri ve daha fazlasını içeren, büyüyen açık bir interaktif harita arşivi. Tam liste aşağıda." },
       tools: ["QGIS", "Python", "Leaflet / MapLibre", "GitHub Pages"], layers: ["code", "comm", "spatial", "data"],
       link: "https://barisparlatangiller.github.io/", repo: "https://github.com/barisparlatangiller"
-    },
-    {
-      id: "baku", plate: "radial", year: "2019–20", place: "Baku, Azerbaijan",
-      kicker: { en: "Masterplanning · Albert Speer + Partner", de: "Masterplanung · Albert Speer + Partner", tr: "Master plan · Albert Speer + Partner" },
-      title: { en: "Baku 2040 Masterplan", de: "Masterplan Baku 2040", tr: "Bakü 2040 Master Planı" },
-      question: { en: "What spatial evidence does a capital city need to plan its next twenty years?", de: "Welche räumliche Evidenz braucht eine Hauptstadt, um ihre nächsten zwanzig Jahre zu planen?", tr: "Bir başkent önümüzdeki yirmi yılını planlamak için hangi mekânsal kanıtlara ihtiyaç duyar?" },
-      method: { en: "150+ geospatial layers and 50+ analytical maps on mobility, land use and environment, feeding strategy packages.", de: "150+ Geodaten-Layer und 50+ Analysekarten zu Mobilität, Flächennutzung und Umwelt als Basis der Strategiepakete.", tr: "Strateji paketlerini besleyen ulaşım, arazi kullanımı ve çevre üzerine 150+ mekânsal katman ve 50+ analitik harita." },
-      outcome: { en: "The masterplan received the ISOCARP Award.", de: "Der Masterplan erhielt den ISOCARP Award.", tr: "Master plan ISOCARP Ödülü'nü aldı." },
-      tools: ["ArcGIS", "QGIS"], layers: ["data", "plan", "comm"]
     },
     {
       id: "gulf", plate: "arcs", year: "2022–24", place: { en: "Oman · Saudi Arabia · Qatar · Georgia", de: "Oman · Saudi-Arabien · Katar · Georgien", tr: "Umman · Suudi Arabistan · Katar · Gürcistan" },
@@ -392,9 +383,68 @@ window.ATLAS = {
     }
   ],
 
+  /* FOLIO — the 16 projects of the 2026 portfolio. Images in assets/img/folio/<id>.webp (+ -board.webp).
+     chapter: 1 spatial intelligence · 2 climate & public realm · 3 culture & adaptive reuse · 4 future systems */
+  chapters: {
+    1: { en: "Spatial intelligence & planning systems", de: "Räumliche Intelligenz & Planungssysteme", tr: "Mekânsal zekâ ve planlama sistemleri" },
+    2: { en: "Climate, public realm & streets", de: "Klima, öffentlicher Raum & Straßen", tr: "İklim, kamusal alan ve sokaklar" },
+    3: { en: "Culture, heritage & adaptive reuse", de: "Kultur, Erbe & Umnutzung", tr: "Kültür, miras ve yeniden kullanım" },
+    4: { en: "Future systems & speculative design", de: "Zukunftssysteme & spekulatives Design", tr: "Gelecek sistemleri ve spekülatif tasarım" }
+  },
+  folio: [
+    { id: "climate-risk", ch: 1, place: "Unterschleißheim, DE",
+      title: { en: "Climate Risk Intelligence", de: "Climate Risk Intelligence", tr: "İklim Riski Zekâsı" },
+      text: { en: "Heat, flood and ecological vulnerability overlaid with development pressure, so a municipality sees where climate risk and opportunity intersect. The risk map is not the result; knowing what to do first is.", de: "Hitze-, Hochwasser- und ökologische Verwundbarkeit überlagert mit Entwicklungsdruck, damit eine Kommune sieht, wo Klimarisiko und Chance zusammenfallen. Das Ergebnis ist nicht die Risikokarte, sondern das Wissen, was zuerst zu tun ist.", tr: "Isı, taşkın ve ekolojik kırılganlık gelişme baskısıyla üst üste bindirildi; belediye iklim riskinin ve fırsatın kesiştiği yeri görüyor. Çıktı risk haritası değil, önceliktir." } },
+    { id: "baku-2040", ch: 1, place: "Baku, AZ",
+      title: { en: "Baku 2040, the Geospatial Evidence Base", de: "Baku 2040, die Geodatenbasis", tr: "Bakü 2040 Mekânsal Kanıt Tabanı" },
+      text: { en: "150+ layers and 50+ analytical maps behind a metropolitan vision for 2,150 km² and 2.5 million people. ISOCARP Award.", de: "150+ Layer und 50+ Analysekarten hinter einer Metropolvision für 2.150 km² und 2,5 Mio. Menschen. ISOCARP Award.", tr: "2.150 km² ve 2,5 milyon kişilik bir metropol vizyonunun arkasında 150+ katman ve 50+ analitik harita. ISOCARP Ödülü." } },
+    { id: "scenario-platform", ch: 1, place: "35 districts · 13 municipalities",
+      title: { en: "GIS Planning Scenario Platform", de: "GIS-Plattform für Planungsszenarien", tr: "CBS Planlama Senaryo Platformu" },
+      text: { en: "A decision engine that tests growth priority, climate resilience and 15-minute accessibility side by side. The goal was never more maps. It was a machine that makes alternatives comparable.", de: "Eine Entscheidungsmaschine, die Wachstumspriorität, Klimaresilienz und 15-Minuten-Erreichbarkeit nebeneinander testet. Ziel waren nicht mehr Karten, sondern vergleichbare Alternativen.", tr: "Büyüme önceliği, iklim dirençliliği ve 15 dakikalık erişilebilirliği yan yana test eden bir karar motoru. Amaç daha çok harita değil, alternatifleri karşılaştırılabilir kılan bir makineydi." } },
+    { id: "nizwa-2040", ch: 1, place: "Nizwa, OM",
+      title: { en: "Nizwa Master Plan 2040", de: "Masterplan Nizwa 2040", tr: "Nizwa Master Planı 2040" },
+      text: { en: "A regional structure that ties heritage landscapes, wadis and emerging urban centres into one development framework for 2040.", de: "Eine Regionalstruktur, die Kulturlandschaften, Wadis und neue Zentren zu einem Entwicklungsrahmen für 2040 verbindet.", tr: "Miras peyzajlarını, vadileri ve yükselen kent merkezlerini 2040 için tek bir gelişme çerçevesinde birleştiren bölgesel yapı." } },
+    { id: "wadi-landscape", ch: 2, place: "Wadi Andam Halfayn, OM",
+      title: { en: "Landscape Zoning Strategy", de: "Landschaftszonierung", tr: "Peyzaj Bölgeleme Stratejisi" },
+      text: { en: "Zones that follow the wadi's hydrology: ecological cores, productive landscapes and community nodes, balanced instead of competing.", de: "Zonen entlang der Hydrologie des Wadis: ökologische Kerne, produktive Landschaften und Gemeinschaftsknoten, die sich ergänzen statt zu konkurrieren.", tr: "Vadinin hidrolojisini izleyen bölgeler: ekolojik çekirdekler, üretken peyzajlar ve birbiriyle yarışmak yerine dengede duran topluluk düğümleri." } },
+    { id: "watershed", ch: 2, place: "İstanbul, TR",
+      title: { en: "Watershed Resilience Framework", de: "Resilienzrahmen Wassereinzugsgebiet", tr: "Su Havzası Dirençlilik Çerçevesi" },
+      text: { en: "Küçükçekmece and Sazlıdere basins: ecological corridors from ridge to coast that protect water, reduce flood risk and reconnect the city to its lake.", de: "Einzugsgebiete Küçükçekmece und Sazlıdere: ökologische Korridore vom Kamm bis zur Küste, die Wasser schützen, Hochwasser mindern und die Stadt mit dem See verbinden.", tr: "Küçükçekmece ve Sazlıdere havzaları: sırttan kıyıya uzanan, suyu koruyan, taşkın riskini azaltan ve şehri gölüyle yeniden buluşturan ekolojik koridorlar." } },
+    { id: "biserinlik", ch: 2, place: "Bayraklı, İzmir",
+      title: { en: "#BiSerinlikLazım", de: "#BiSerinlikLazım", tr: "#BiSerinlikLazım" },
+      text: { en: "A blue-green cooling corridor along Bayraklı's Sevgi Yolu. More shade, more water and more life, all measured as a drop in surface temperature.", de: "Ein blau-grüner Kühlkorridor entlang des Sevgi Yolu in Bayraklı. Mehr Schatten, mehr Wasser und mehr Leben, gemessen daran, wie stark die Oberflächentemperatur sinkt.", tr: "Bayraklı Sevgi Yolu boyunca mavi-yeşil bir serinleme koridoru. Daha çok gölge, daha çok su ve daha çok yaşam; hepsi yüzey sıcaklığındaki düşüşle ölçülüyor." } },
+    { id: "bostanli", ch: 2, place: "Bostanlı, İzmir",
+      title: { en: "Bostanlı Climate Corridor", de: "Klimakorridor Bostanlı", tr: "Bostanlı İklim Koridoru" },
+      text: { en: "A coastal spine for walking, cycling and the tram, cooled by native shade trees, bioswales and permeable surfaces.", de: "Eine Küstenachse für Fußverkehr, Rad und Tram, gekühlt durch heimische Schattenbäume, Mulden und versickerungsfähige Beläge.", tr: "Yürüme, bisiklet ve tramvay için kıyı omurgası; yerel gölge ağaçları, biyo-hendekler ve geçirgen yüzeylerle serinletiliyor." } },
+    { id: "rudolfstrasse", ch: 2, place: "Frankfurt am Main, DE",
+      title: { en: "Rudolfstraße", de: "Rudolfstraße", tr: "Rudolfstraße" },
+      text: { en: "A street redesign off Mainzer Landstraße: wider sidewalks, rain gardens and street trees that handle stormwater on site.", de: "Neugestaltung an der Mainzer Landstraße: breitere Gehwege, Regengärten und Straßenbäume, die Regenwasser vor Ort halten.", tr: "Mainzer Landstraße yakınında sokak tasarımı: geniş kaldırımlar, yağmur bahçeleri ve yağmur suyunu yerinde tutan sokak ağaçları." } },
+    { id: "tactical-cooling", ch: 2, place: "Alsancak, İzmir",
+      title: { en: "Tactical Urbanism for Cooler Cities", de: "Taktischer Urbanismus für kühlere Städte", tr: "Daha Serin Şehirler İçin Taktik Şehircilik" },
+      text: { en: "Data finds the hotspots; small, cheap, fast interventions cool them today and prepare systemic change tomorrow. Cooling is the new cool.", de: "Daten finden die Hotspots; kleine, günstige, schnelle Eingriffe kühlen sie heute und bereiten den systemischen Wandel vor.", tr: "Veri sıcak noktaları buluyor; küçük, ucuz ve hızlı müdahaleler bugün serinletiyor, yarının sistemik dönüşümünü hazırlıyor." } },
+    { id: "avlu-kayakoy", ch: 3, place: "Kayaköy, Fethiye",
+      title: { en: "AVLU, Living Ruins", de: "AVLU, Lebende Ruinen", tr: "AVLU, Yaşayan Harabeler" },
+      text: { en: "An abandoned stone village becomes an open-air museum: an elevated walkway, four routes and a network of courtyards that keep the ruins as they are.", de: "Ein verlassenes Steindorf wird Freilichtmuseum: ein erhöhter Steg, vier Routen und ein Netz aus Höfen, das die Ruinen unangetastet lässt.", tr: "Terk edilmiş taş köy açık hava müzesine dönüşüyor: yükseltilmiş yürüyüş yolu, dört rota ve harabelere dokunmayan avlular ağı." } },
+    { id: "mosaic-pubvate", ch: 3, place: "Tbilisi, GE",
+      title: { en: "Mosaic Pubvate", de: "Mosaic Pubvate", tr: "Mosaic Pubvate" },
+      text: { en: "The Eliava market district reimagined: an elevated mosaic path where public and private space dissolve into one another. Competition finalist.", de: "Das Eliava-Marktviertel neu gedacht: ein erhöhter Mosaikpfad, auf dem öffentlicher und privater Raum ineinander übergehen. Wettbewerbsfinalist.", tr: "Eliava pazar bölgesi yeniden: kamusal ve özel alanın birbirine karıştığı yükseltilmiş bir mozaik yol. Yarışma finalisti." } },
+    { id: "new-stage", ch: 3, place: { en: "Lakefront concept", de: "Konzept am Seeufer", tr: "Göl kıyısı konsepti" },
+      title: { en: "The New Stage Is Urban Nature", de: "Die neue Bühne ist Stadtnatur", tr: "Yeni Sahne Kentsel Doğadır" },
+      text: { en: "An amphitheatre without a backdrop: a single steel frame holds the horizon, and the landscape becomes the stage.", de: "Ein Amphitheater ohne Kulisse: ein einziger Stahlrahmen fasst den Horizont, die Landschaft wird zur Bühne.", tr: "Dekoru olmayan bir amfitiyatro: tek bir çelik çerçeve ufku tutuyor, peyzaj sahneye dönüşüyor." } },
+    { id: "bodegas-vinival", ch: 3, place: "Valencia, ES",
+      title: { en: "Bodegas Vinival", de: "Bodegas Vinival", tr: "Bodegas Vinival" },
+      text: { en: "Brick wine silos from 1900, abandoned by 2025, and a living agro lab by 2030. A century of continuity, told as a timeline.", de: "Weinsilos aus Ziegel von 1900, verlassen im Jahr 2025 und ab 2030 ein lebendiges Agrarlabor. Ein Jahrhundert Kontinuität, erzählt als Zeitleiste.", tr: "1900'den kalma tuğla şarap siloları, 2025'te terk edilmiş, 2030'da ise yaşayan bir tarım laboratuvarı. Zaman çizelgesi olarak anlatılan bir asırlık süreklilik." } },
+    { id: "cubic-flux", ch: 4, place: { en: "Wetland campus", de: "Campus im Feuchtgebiet", tr: "Sulak alan kampüsü" },
+      title: { en: "Cubic Flux", de: "Cubic Flux", tr: "Cubic Flux" },
+      text: { en: "A modular research campus raised above a wetland, built to grow, shrink and be taken apart without leaving a trace.", de: "Ein modularer Forschungscampus über einem Feuchtgebiet, gebaut, um zu wachsen, zu schrumpfen und spurlos rückgebaut zu werden.", tr: "Sulak alanın üzerinde yükselen modüler bir araştırma kampüsü; büyüyebilen, küçülebilen ve iz bırakmadan sökülebilen." } },
+    { id: "kizil-yamac", ch: 4, place: { en: "Mars", de: "Mars", tr: "Mars" },
+      title: { en: "Kızıl Yamaç AgroPilot", de: "Kızıl Yamaç AgroPilot", tr: "Kızıl Yamaç AgroPilot" },
+      text: { en: "Food for a permanent human presence on Mars: pressurised greenhouse branches, a closed water loop and a field that grows by adding modules.", de: "Nahrung für eine dauerhafte Präsenz auf dem Mars: Druckgewächshäuser, ein geschlossener Wasserkreislauf und ein Feld, das modulweise wächst.", tr: "Mars'ta kalıcı insan varlığı için gıda: basınçlı sera kolları, kapalı su döngüsü ve modül ekledikçe büyüyen bir üretim alanı." } }
+  ],
+
   /* Public GitHub projects. `kind`: "research" | "30dmc". Add new ones here. */
   repos: [
-    { repo: "Urban-Heat-Stress---Frankfurt-Platz", kind: "research", title: "Urban Heat Stress — Frankfurt Platz", city: "Frankfurt", theme: "1 m heat model" },
+    { repo: "Urban-Heat-Stress---Frankfurt-Platz", kind: "research", title: "Urban Heat Stress, Frankfurt Platz", city: "Frankfurt", theme: "1 m heat model" },
     { repo: "30DMC26-D01-Points-Berlin-Rent-vs-Location", kind: "30dmc", day: 1, title: "Rent vs Location", city: "Berlin", theme: "Points" },
     { repo: "30DMC26-D02-Lines-Leipzig-Street-Canopy-Heat", kind: "30dmc", day: 2, title: "Street Canopy Heat", city: "Leipzig", theme: "Lines" },
     { repo: "30DMC26-D03-Polygons-Frankfurt-Land-Value-2035", kind: "30dmc", day: 3, title: "Land Value 2035", city: "Frankfurt", theme: "Polygons" },

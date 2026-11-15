@@ -2,7 +2,7 @@
    Deterministic (seeded) so they look identical on every visit.
    Swap for real screenshots by adding `image` to a work in data/content.js. */
 window.Plates = (function () {
-  const INK = "#141414", PAPER = "#EEEBE3", SIG = "#E4572E";
+  const INK = "#0A0A0A", PAPER = "#D8D8D3", SIG = "#1F3BFF";
   const RAMP = ["#22476B", "#2E7D8C", "#7FB069", "#F2C14E", "#E8743B", "#C9302C", "#6E1423"];
   function rng(s) { return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
   function ramp(t) { t = Math.max(0, Math.min(.999, t)); const f = t * (RAMP.length - 1), i = Math.floor(f); return mix(RAMP[i], RAMP[i + 1], f - i); }
@@ -45,7 +45,7 @@ window.Plates = (function () {
       for (let k = 1; k <= 9; k++) b += `<circle cx="${cx}" cy="${cy}" r="${k * 22}" fill="none" stroke="${INK}" stroke-opacity="${k % 3 ? .18 : .5}"/>`;
       for (let a = 0; a < 24; a++) { const t = a / 24 * Math.PI * 2; b += `<line x1="${cx}" y1="${cy}" x2="${cx + Math.cos(t) * 260}" y2="${cy + Math.sin(t) * 260}" stroke="${INK}" stroke-opacity="${a % 6 ? .12 : .45}"/>`; }
       for (let n = 0; n < 150; n++) { const t = r() * 6.283, d = 20 + r() * 180, s = 3 + r() * 7; b += `<rect x="${cx + Math.cos(t) * d}" y="${cy + Math.sin(t) * d}" width="${s}" height="${s}" fill="${r() > .85 ? SIG : INK}" fill-opacity="${.35 + r() * .6}" transform="rotate(${t * 57} ${cx + Math.cos(t) * d} ${cy + Math.sin(t) * d})"/>`; }
-      b += `<path d="M0 ${h * .2} C ${w * .3} ${h * .1}, ${w * .5} ${h * .35}, ${w} ${h * .15}" fill="none" stroke="#2F5D8A" stroke-width="10" stroke-opacity=".5"/>`;
+      b += `<path d="M0 ${h * .2} C ${w * .3} ${h * .1}, ${w * .5} ${h * .35}, ${w} ${h * .15}" fill="none" stroke="#1F3BFF" stroke-width="10" stroke-opacity=".5"/>`;
       return svg(w, h, b);
     },
     /* arcs from Frankfurt to project cities */
@@ -81,7 +81,7 @@ window.Plates = (function () {
         }
         b += `<path d="${d}" fill="none" stroke="${k === 9 ? SIG : INK}" stroke-opacity="${k % 4 ? .35 : .8}"/>`;
       }
-      b += `<path d="M0 ${h * .7} C ${w * .25} ${h * .62}, ${w * .45} ${h * .9}, ${w} ${h * .78}" fill="none" stroke="#2F5D8A" stroke-width="3"/>`;
+      b += `<path d="M0 ${h * .7} C ${w * .25} ${h * .62}, ${w * .45} ${h * .9}, ${w} ${h * .78}" fill="none" stroke="#1F3BFF" stroke-width="3"/>`;
       return svg(w, h, b);
     }
   };

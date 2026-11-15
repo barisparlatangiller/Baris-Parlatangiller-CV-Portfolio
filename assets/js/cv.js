@@ -9,17 +9,17 @@
 
   function render() {
     const P = A.person, F = A.focus[focus];
-    document.title = `${P.name} — CV`;
+    document.title = `${P.name} · CV`;
     document.getElementById("focusSeg").innerHTML = Object.entries(A.focus).map(([k, f]) => `<button data-focus="${k}" aria-pressed="${k === focus}">${esc(L(f.label))}</button>`).join("");
 
     const exp = A.experience.map(e => `
       <article class="job">
-        <header><h3>${esc(L(focus === "plan" && e.rolePlan ? e.rolePlan : e.role))}</h3><span class="date">${I.fmtDate(e.start)} – ${I.fmtDate(e.end)}</span></header>
+        <header><h3>${esc(L(focus === "plan" && e.rolePlan ? e.rolePlan : e.role))}</h3><span class="date">${I.fmtDate(e.start)} → ${I.fmtDate(e.end)}</span></header>
         <p class="org">${esc(L(e.org))} · ${esc(L(e.city))}</p>
         <ul>${(e.bullets[I.lang] || e.bullets.en).map(b => `<li>${esc(b)}</li>`).join("")}</ul>
       </article>`).join("");
 
-    const projects = A.works.slice(0, 4).map(w => `<li><b>${esc(L(w.title))}</b> <span class="date">${w.year}</span> — ${esc(L(w.outcome).split(". ")[0].replace(/\.$/, ""))}.${w.link ? ` <a href="${w.link}">${w.link.replace("https://", "")}</a>` : ""}</li>`).join("");
+    const projects = A.works.slice(0, 4).map(w => `<li><b>${esc(L(w.title))}</b> <span class="date">${w.year}</span>. ${esc(L(w.outcome).split(". ")[0].replace(/\.$/, ""))}.${w.link ? ` <a href="${w.link}">${w.link.replace("https://", "")}</a>` : ""}</li>`).join("");
 
     document.getElementById("cv").innerHTML = `
       <header class="head">
@@ -48,7 +48,7 @@
 
       <div class="cols">
         <section><h2>${T("cv.education")}</h2>
-          ${A.education.map(e => `<article class="job"><header><h3>${esc(L(e.title))}</h3><span class="date">${e.start.slice(0, 4)} – ${e.end.slice(0, 4)}</span></header><p class="org">${esc(L(e.org))}</p></article>`).join("")}
+          ${A.education.map(e => `<article class="job"><header><h3>${esc(L(e.title))}</h3><span class="date">${e.start.slice(0, 4)} → ${e.end.slice(0, 4)}</span></header><p class="org">${esc(L(e.org))}</p></article>`).join("")}
         </section>
         <section><h2>${T("cv.languages")}</h2>
           <ul class="langs">${A.languages.map(l => `<li><span>${esc(L(l.name))}</span><span class="date">${esc(L(l.level))}</span></li>`).join("")}</ul>

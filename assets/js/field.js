@@ -1,97 +1,80 @@
-/* Hero: a live contour map (marching squares) of drifting "heat sources".
-   The cursor adds a warm hill; the contours closest to it light up in the signal colour. */
-window.initField = function (canvas) {
+/* Fig. 1 — a halftone heat map of an imaginary paved square.
+   Dot size = surface temperature. The cursor is a tree: it casts a shadow in the real
+   direction of the sun over Frankfurt right now, and the dots inside it cool (and turn Klein blue). */
+window.initField = function (canvas, onSun) {
   const ctx = canvas.getContext("2d");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const CELL = 11;
-  let W = 0, H = 0, dpr = 1, cols = 0, rows = 0, vals = null, running = true, raf = 0;
-  const mouse = { x: -9999, y: -9999, s: 0, ts: 0 };
+  const STEP = 13;
+  let W = 0, H = 0, dpr = 1, running = true, sun = Sun.position();
+  const cur = { x: -999, y: -999, s: 0, ts: 0 };
+  const INK = "#0A0A0A", KLEIN = "#1F3BFF";
 
-  // deterministic seed so the composition is stable between visits
-  let seed = 20261116; const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
-  const src = Array.from({ length: 6 }, () => ({ x: .25 + rnd() * .75, y: rnd(), r: .16 + rnd() * .18, a: .55 + rnd() * .7, ph: rnd() * 6.28, sp: .00006 + rnd() * .00008 }));
-  const LEVELS = []; for (let l = .12; l < 2.2; l += .115) LEVELS.push(l);
+  // a fixed "square": two building blocks, a street, sealed hot paving, one fountain
+  function base(x, y) {
+    const u = x / W, v = y / H;
+    let t = .62 + .18 * Math.sin(u * 7.1 + 1.3) * Math.cos(v * 5.3) + .12 * Math.sin(u * 19 + v * 11);
+    if (v > .78) t += .2;                                        // asphalt street
+    const f = Math.hypot(u - .63, (v - .42) * 1.4); if (f < .09) t -= .55 * (1 - f / .09); // fountain
+    return Math.max(0, Math.min(1, t));
+  }
+  const isBuilding = (x, y) => (x / W < .1 && y / H < .7) || (x / W > .86 && y / H > .16 && y / H < .58);
 
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(devicePixelRatio || 1, 2);
     W = canvas.clientWidth; H = canvas.clientHeight;
-    canvas.width = W * dpr; canvas.height = H * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cols = Math.ceil(W / CELL) + 1; rows = Math.ceil(H / CELL) + 1;
-    vals = new Float32Array(cols * rows);
+    canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function compute(t) {
-    const m = Math.min(W, H);
-    const S = src.map(s => ({
-      x: (s.x + Math.sin(t * s.sp + s.ph) * .09) * W,
-      y: (s.y + Math.cos(t * s.sp * 1.3 + s.ph) * .09) * H,
-      k: 1 / (2 * (s.r * m) ** 2), a: s.a
-    }));
-    const mk = 1 / (2 * 150 * 150);
-    for (let j = 0; j < rows; j++) {
-      const py = j * CELL;
-      for (let i = 0; i < cols; i++) {
-        const px = i * CELL; let v = 0;
-        for (let n = 0; n < S.length; n++) { const dx = px - S[n].x, dy = py - S[n].y; v += S[n].a * Math.exp(-(dx * dx + dy * dy) * S[n].k); }
-        if (mouse.s > .001) { const dx = px - mouse.x, dy = py - mouse.y; v += .95 * mouse.s * Math.exp(-(dx * dx + dy * dy) * mk); }
-        vals[j * cols + i] = v;
-      }
-    }
-  }
-
-  // marching squares segment table: edges 0=top 1=right 2=bottom 3=left
-  const SEG = [[], [[3, 2]], [[2, 1]], [[3, 1]], [[0, 1]], [[3, 0], [2, 1]], [[0, 2]], [[3, 0]], [[3, 0]], [[0, 2]], [[3, 2], [0, 1]], [[0, 1]], [[3, 1]], [[2, 1]], [[3, 2]], []];
-
-  function draw() {
+  function draw(t) {
     ctx.clearRect(0, 0, W, H);
-    // fade the field out under the headline (left) for legibility
-    for (let li = 0; li < LEVELS.length; li++) {
-      const L = LEVELS[li];
-      const major = li % 4 === 0;
-      const hotness = Math.min(1, li / LEVELS.length * 1.4);
-      ctx.beginPath();
-      for (let j = 0; j < rows - 1; j++) {
-        for (let i = 0; i < cols - 1; i++) {
-          const a = vals[j * cols + i], b = vals[j * cols + i + 1], c = vals[(j + 1) * cols + i + 1], d = vals[(j + 1) * cols + i];
-          const idx = (a > L ? 8 : 0) | (b > L ? 4 : 0) | (c > L ? 2 : 0) | (d > L ? 1 : 0);
-          if (idx === 0 || idx === 15) continue;
-          const x = i * CELL, y = j * CELL;
-          const e = (k) => {
-            switch (k) {
-              case 0: return [x + CELL * (L - a) / (b - a), y];
-              case 1: return [x + CELL, y + CELL * (L - b) / (c - b)];
-              case 2: return [x + CELL * (L - d) / (c - d), y + CELL];
-              default: return [x, y + CELL * (L - a) / (d - a)];
-            }
-          };
-          const segs = SEG[idx];
-          for (let s = 0; s < segs.length; s++) { const p = e(segs[s][0]), q = e(segs[s][1]); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); }
+    const day = sun.alt > 0;
+    // shadow vector: away from the sun azimuth, length ~ 1/tan(alt)
+    const len = day ? Math.min(220, 40 / Math.tan(Math.max(4, sun.alt) * Math.PI / 180)) : 0;
+    const a = (sun.az + 180) * Math.PI / 180;               // shadow points away from the sun
+    const sx = Math.sin(a), sy = -Math.cos(a);              // screen: north = up
+    // building shadows as well
+    for (let y = STEP / 2; y < H; y += STEP) {
+      for (let x = STEP / 2; x < W; x += STEP) {
+        if (isBuilding(x, y)) { ctx.fillStyle = INK; ctx.fillRect(x - STEP / 2, y - STEP / 2, STEP, STEP); continue; }
+        let v = base(x, y) + .04 * Math.sin(t * .0012 + x * .05 + y * .03);
+        // building shade (cast along the sun shadow vector)
+        let shade = 0;
+        if (day) for (let k = 8; k < len * .9; k += 10) { if (isBuilding(x - sx * k, y - sy * k)) { shade = Math.max(shade, 1 - k / len); break; } }
+        // cursor-tree: crown + shadow capsule
+        if (cur.s > .01) {
+          const px = x - cur.x, py = y - cur.y;
+          const along = Math.max(0, Math.min(len, px * sx + py * sy));
+          const dx = px - sx * along, dy = py - sy * along;
+          const d = Math.hypot(dx, dy);
+          shade = Math.max(shade, cur.s * Math.exp(-(d * d) / (2 * 34 * 34)));
         }
+        v *= 1 - .8 * shade;
+        const r = .4 + v * (STEP * .5);
+        ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832);
+        ctx.fillStyle = shade > .35 ? KLEIN : INK; ctx.fill();
       }
-      if (hotness > .78) { ctx.strokeStyle = `rgba(228,87,46,${.55 + (hotness - .78)})`; ctx.lineWidth = 1.2; }
-      else { ctx.strokeStyle = `rgba(20,20,20,${major ? .32 : .14})`; ctx.lineWidth = major ? 1 : .8; }
-      ctx.stroke();
     }
-    // vignette toward the text column
-    const g = ctx.createLinearGradient(0, 0, W * .62, 0);
-    g.addColorStop(0, "rgba(238,235,227,.92)"); g.addColorStop(.55, "rgba(238,235,227,.55)"); g.addColorStop(1, "rgba(238,235,227,0)");
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   }
 
   let last = 0;
   function frame(t) {
-    raf = requestAnimationFrame(frame);
-    if (!running || t - last < 33) return; last = t;
-    mouse.s += (mouse.ts - mouse.s) * .06;
-    compute(t); draw();
+    requestAnimationFrame(frame);
+    if (!running || t - last < 40) return; last = t;
+    cur.s += (cur.ts - cur.s) * .12;
+    draw(t);
   }
+  function tickSun() { sun = Sun.position(); onSun && onSun(sun); }
 
-  resize(); compute(4000); draw();
-  addEventListener("resize", () => { resize(); compute(performance.now()); draw(); });
+  resize(); tickSun(); draw(0);
+  setInterval(tickSun, 60000);
+  addEventListener("resize", () => { resize(); draw(performance.now()); });
+  canvas.addEventListener("pointermove", e => { const r = canvas.getBoundingClientRect(); cur.x = e.clientX - r.left; cur.y = e.clientY - r.top; cur.ts = 1; if (reduce) { cur.s = 1; draw(0); } });
+  canvas.addEventListener("pointerleave", () => { cur.ts = 0; if (reduce) { cur.s = 0; draw(0); } });
+  // invite interaction: a slow automatic "tree" walks the square until the visitor takes over
+  let auto = !reduce, t0 = performance.now();
+  canvas.addEventListener("pointerenter", () => { auto = false; });
+  (function walk() { if (!auto) return; const k = (performance.now() - t0) / 5200; cur.x = W * (.35 + .25 * Math.sin(k)); cur.y = H * (.45 + .2 * Math.sin(k * 1.7)); cur.ts = .85; requestAnimationFrame(walk); })();
   if (reduce) return;
-  canvas.parentElement.addEventListener("pointermove", e => { const r = canvas.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.ts = 1; });
-  canvas.parentElement.addEventListener("pointerleave", () => { mouse.ts = 0; });
   new IntersectionObserver(([en]) => { running = en.isIntersecting; }).observe(canvas);
-  raf = requestAnimationFrame(frame);
+  requestAnimationFrame(frame);
 };

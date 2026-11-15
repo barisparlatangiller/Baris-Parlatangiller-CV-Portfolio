@@ -10,20 +10,23 @@ English · Deutsch · Türkçe
 
 ## The idea
 
-A portfolio for someone who makes maps should read like an atlas, not a template.
-The site is built as a series of numbered **plates**:
+The site is designed like a Swiss International Style magazine, made for someone who makes maps. It uses concrete grey, ink black and one colour, Klein blue. Heat colours appear only where they are data.
 
-| Plate | What it does |
+| Part | What it does |
 |---|---|
-| **00 · Entrance** | A live contour map (marching squares) that reacts to the cursor. |
-| **01 · Itinerary** | The career drawn as a route on a bare graticule: İzmir → Frankfurt → München, with arcs to project cities in the Gulf and Caucasus. A timeline drives the map. |
-| **02 · Layers** | Skills as a GIS layer panel. Toggle a layer to see which roles and projects back it up. No skill percentages. |
-| **03 · Works** | Editorial case studies built around one question each: question, method, outcome, tools. |
-| **04 · Lab** | *Cool a square*: paint trees, water and grass on a paved plaza and watch a simple surface-temperature model react. It links to the real 1 m SOLWEIG study. |
-| **05 · Index** | Every public map repository, filterable and searchable. |
-| **06 · Contact** | Email, LinkedIn, GitHub, CV. |
+| **Masthead** | One cover in three languages, like *Neue Grafik*. Fig. 1 is a halftone heat map: your cursor is a tree, and its shadow falls in the real direction of the sun over Frankfurt right now, calculated in the browser. |
+| **Powers of ten** | A pinned scroll sequence that zooms from a 400,000 ha region down to one square metre, with a live map scale. Each step is a real project. |
+| **01 Route** | The career drawn as a route on a bare graticule. The timeline drives the map. |
+| **02 Layers** | Skills as a GIS layer panel, linked to the roles and projects that prove them. |
+| **03 Works** | Two in-depth case studies (Frankfurt heat stress, #30DayMapChallenge) plus further work and awards. |
+| **Folio** | The sixteen projects of the 2026 portfolio in a pinned horizontal gallery. Every image opens its full A3 board in a map-style viewer with zoom and pan. |
+| **04 Lab** | *Cool a square*: paint trees, water and grass on a plaza and watch a simple surface temperature model react. |
+| **05 Index** | Every public map repository, filterable and searchable. |
+| **06 Contact** | A Klein blue panel that grows open as you scroll. |
 
-The **CV page** (`cv.html`) is the opposite on purpose: quiet, semantic and ATS-friendly, with print-to-PDF built in. A **Focus** switch toggles between two readings of the same career, **GIS & Geospatial** and **Urban & Regional Planning**. It changes the headline, profile, skills and role titles.
+Press **G** anywhere to see the 12 column grid.
+
+The **CV page** (`cv.html`) is calm, semantic and ATS friendly, with print to PDF built in. A **Focus** switch toggles between the GIS reading and the urban planning reading of the same career.
 
 ## Why no framework?
 
@@ -39,7 +42,7 @@ The site is plain HTML, CSS and JavaScript. There is no build step and no depend
 
 - **New GitHub project:** add one line to `repos` at the bottom of the file. The index and the stats update automatically.
 - **New job:** add an object to `experience`, with `places` (keys from `places`) and `layers` (skill ids).
-- **Real images for case studies:** put a `.webp` in `assets/img/` and add `image: "assets/img/name.webp"` to the work. Without an image, a generative "map plate" is drawn.
+- **Folio projects:** add an entry to `folio` and put `<id>.webp` (cover) and `<id>-board.webp` (full board) in `assets/img/folio/`.
 - **Interface wording:** [`data/ui.js`](data/ui.js).
 
 ## Structure
@@ -50,7 +53,8 @@ cv.html             the CV (print → PDF)
 data/content.js     all content, EN/DE/TR
 data/ui.js          interface strings, EN/DE/TR
 assets/css/         style.css (atlas), cv.css (CV + print)
-assets/js/          i18n · field (hero contours) · plates (generative art) · lab · main · cv
+assets/js/          i18n · sun · field (halftone hero) · scroll (choreography) · viewer · plates · lab · main · cv
+assets/img/folio/   project covers and A3 boards
 ```
 
 ## Run locally

@@ -10,9 +10,16 @@
 
   /* ---------------- hero ---------------- */
   function renderStats() {
-    const countries = 7; // DE, TR, AZ, OM, SA, QA, GE
-    const items = [["8+", "stat.years"], [countries, "stat.countries"], ["400k", "stat.ha"], [A.repos.length, "stat.repos"]];
-    $("#stats").innerHTML = items.map(([v, k]) => `<div><dt>${v}</dt><dd>${esc(T(k))}</dd></div>`).join("");
+    const items = [["7", "stat.countries2"], ["400k", "stat.ha2"], [A.repos.length, "stat.repos2"], [A.folio.length, "fo.kicker"]];
+    $("#stats").innerHTML = items.map(([v, k]) => `<div><dt>${v}</dt><dd>${esc(k === "fo.kicker" ? "Folio 2026" : T(k))}</dd></div>`).join("");
+  }
+  function renderSun(sun) {
+    const t = Sun.frankfurtTime(), dirs = T("dirs").split(",");
+    const shadowAz = (sun.az + 180) % 360, dir = dirs[Math.round(shadowAz / 45) % 8];
+    const line = sun.alt > 0
+      ? T("fig.sun").replace("{time}", t).replace("{alt}", sun.alt.toFixed(1)).replace("{len}", (10 / Math.tan(Math.max(.5, sun.alt) * Math.PI / 180)).toFixed(1)).replace("{dir}", dir)
+      : T("fig.night").replace("{time}", t).replace("{alt}", Math.abs(sun.alt).toFixed(1));
+    $("#sunline").textContent = line;
   }
 
   /* ---------------- 01 itinerary ---------------- */
@@ -64,7 +71,7 @@
     const pct = v => ((v - y0) / span * 100).toFixed(3) + "%";
     let ticks = ""; for (let y = y0; y <= y1; y++) ticks += `<span class="tick" style="left:${pct(y)}">${y}</span>`;
     const rows = stations.slice().sort((a, b) => ym(a.start) - ym(b.start)).map(st => {
-      const a = ym(st.start), b = ym(st.end), label = st.kind === "edu" ? L(st.title) : `${L(st.org)} — ${L(st.role)}`;
+      const a = ym(st.start), b = ym(st.end), label = st.kind === "edu" ? L(st.title) : `${L(st.org)}, ${L(st.role)}`;
       return `<div class="row" role="listitem"><button class="barbtn ${st.kind}" data-id="${st.id}" aria-pressed="${st.id === selected}" style="left:${pct(a)};width:calc(${pct(b)} - ${pct(a)})" title="${esc(label)}">${esc(st.kind === "edu" ? T("it.edu") : L(st.org))}</button></div>`;
     }).join("");
     $("#gantt").innerHTML = `<div class="axis">${ticks}<span class="now" style="left:${pct(ym(null))}"></span></div>${rows}`;
@@ -72,7 +79,7 @@
 
   function renderDetail() {
     const st = stations.find(s => s.id === selected);
-    const when = `${I.fmtDate(st.start)} — ${I.fmtDate(st.end)}`;
+    const when = `${I.fmtDate(st.start)} → ${I.fmtDate(st.end)}`;
     let html;
     if (st.kind === "edu") {
       html = `<p class="when mono">${esc(when)} · ${esc(T("it.edu"))}</p><h3>${esc(L(st.title))}</h3><p class="org">${esc(L(st.org))}</p>`;
@@ -134,12 +141,13 @@
   function renderWorks() {
     const feat = A.works.filter(w => w.featured), more = A.works.filter(w => !w.featured);
     $("#featured").innerHTML = feat.map((w, i) => `
-      <article class="feat rv ${i % 2 ? "flip" : ""}">
-        <figure class="plate">${plate(w, 400, 300)}<figcaption class="cap">${esc(L(w.place))} · ${w.year}</figcaption></figure>
-        <div class="txt">
-          <span class="num">${String(i + 1).padStart(2, "0")}</span> <span class="mono" style="color:var(--mute)">${esc(L(w.kicker))}</span>
+      <article class="feat">
+        <div class="bignum rv">${String(i + 1).padStart(2, "0")}</div>
+        <figure class="plate clipin">${plate(w, 400, 300)}</figure>
+        <div class="txt rv">
+          <span class="mono kick">${esc(L(w.kicker))} · ${esc(L(w.place))} · ${w.year}</span>
           <h3>${esc(L(w.title))}</h3>
-          <p class="q">“${esc(L(w.question))}”</p>
+          <p class="q">${esc(L(w.question))}</p>
           <dl>
             <div><dt class="mono">${T("wk.method")}</dt><dd>${esc(L(w.method))}</dd></div>
             <div><dt class="mono">${T("wk.outcome")}</dt><dd>${esc(L(w.outcome))}</dd></div>
@@ -162,6 +170,22 @@
     $("#awards").innerHTML = A.awards.map(a => `<li>${esc(L(a.title))}</li>`).join("");
     observeReveal();
   }
+
+  /* ---------------- folio ---------------- */
+  function renderFolio() {
+    let html = "", lastCh = 0;
+    A.folio.forEach((p, i) => {
+      if (p.ch !== lastCh) { lastCh = p.ch; html += `<div class="fch"><div class="n">${p.ch}</div><h3>${esc(L(A.chapters[p.ch]))}</h3></div>`; }
+      html += `<article class="fp" data-i="${i}">
+        <div class="img" role="button" tabindex="0" aria-label="${esc(T("fo.open"))}: ${esc(L(p.title))}"><img src="assets/img/folio/${p.id}.webp" alt="${esc(L(p.title))}" loading="lazy" decoding="async"><span class="zoomhint">${esc(T("fo.open"))} ↗</span></div>
+        <div class="meta"><span class="no">${String(i + 1).padStart(2, "0")}</span><div><h3>${esc(L(p.title))}</h3><span class="mono pl">${esc(L(p.place))}</span></div><p>${esc(L(p.text))}</p></div>
+      </article>`;
+    });
+    $("#folioTrack").innerHTML = html;
+    Scroll.sizeFolio();
+  }
+  $("#folioTrack").addEventListener("click", e => { const f = e.target.closest(".fp .img"); if (f) BoardViewer.open(A.folio, +f.closest(".fp").dataset.i); });
+  $("#folioTrack").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches(".img")) BoardViewer.open(A.folio, +e.target.closest(".fp").dataset.i); });
 
   /* ---------------- 05 index ---------------- */
   let kind = "all", q = "";
@@ -190,41 +214,26 @@
     $("#labLink").href = P.links.uhi;
   }
 
-  /* ---------------- chrome: bar, plate index, coords, reveal ---------------- */
-  function chrome() {
-    const bar = $("#bar"), plates = document.querySelector(".plates"), labWrap = $("#labWrap");
-    const links = [...plates.querySelectorAll("a")];
-    const secs = links.map(a => document.querySelector(a.getAttribute("href")));
-    function onScroll() {
-      const y = scrollY, vh = innerHeight;
-      bar.classList.toggle("solid", y > 40);
-      const lr = labWrap.getBoundingClientRect(), inLab = lr.top < 60 && lr.bottom > 60;
-      bar.classList.toggle("dark", inLab);
-      plates.classList.toggle("show", y > vh * .6);
-      const lp = labWrap.getBoundingClientRect(); plates.classList.toggle("dark", lp.top < vh / 2 && lp.bottom > vh / 2);
-      let cur = 0; secs.forEach((s, i) => { if (s && s.getBoundingClientRect().top < vh * .45) cur = i; });
-      links.forEach((a, i) => a.classList.toggle("on", i === cur));
-    }
-    addEventListener("scroll", onScroll, { passive: true }); onScroll();
-    // cursor → pseudo-coordinates around Frankfurt (a small cartographic joke)
-    const co = $("#coords");
-    addEventListener("pointermove", e => {
-      const lat = 50.1109 + (.5 - e.clientY / innerHeight) * .08, lon = 8.6821 + (e.clientX / innerWidth - .5) * .14;
-      co.textContent = `${lat.toFixed(4)}° N · ${lon.toFixed(4)}° E`;
-    }, { passive: true });
-  }
+  /* ---------------- grid toggle ---------------- */
+  addEventListener("keydown", e => { if ((e.key === "g" || e.key === "G") && !e.target.matches("input, textarea")) document.body.classList.toggle("show-grid"); });
+
   let io;
   function observeReveal() {
-    io = io || new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+    io = io || new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { if (e.target.dataset.clip) e.target.querySelectorAll(".clipin").forEach(c => c.classList.add("in")); else e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
     document.querySelectorAll(".rv:not(.in)").forEach(el => io.observe(el));
+    // clip-path hides an element from IntersectionObserver, so watch its parent instead
+    document.querySelectorAll(".clipin:not(.in)").forEach(el => { el.parentElement.dataset.clip = "1"; io.observe(el.parentElement); });
   }
 
   /* ---------------- boot ---------------- */
-  function renderAll() { renderStats(); renderGantt(); renderDetail(); renderLayers(); renderWorks(); renderIndex(); renderContact(); }
-  I.apply(); drawMap(); renderAll(); chrome();
-  document.querySelectorAll(".sec-head, .gantt, .ly-grid, .lab-grid, .ix-wrap, .ct-links").forEach(el => el.classList.add("rv"));
+  let lastSun = Sun.position();
+  function renderAll() { renderStats(); renderSun(lastSun); renderGantt(); renderDetail(); renderLayers(); renderWorks(); renderFolio(); renderIndex(); renderContact(); }
+  I.apply(); drawMap(); renderAll();
+  document.querySelectorAll(".sh, .gantt, .ly-grid, .lab-grid, .ix-wrap, .ct-links, .tri, .numeral, .toc").forEach(el => el.classList.add("rv"));
   observeReveal();
-  initField($("#field"));
+  Scroll.init();
+  initField($("#field"), sun => { lastSun = sun; renderSun(sun); });
   initLab($("#plaza"), { mean: $("#rMean"), max: $("#rMax"), shade: $("#rShade"), delta: $("#rDelta"), tools: $("#tools"), reset: $("#labReset"), green: $("#labGreen") });
   I.onChange(() => { renderAll(); });
+  addEventListener("load", () => Scroll.sizeFolio());
 })();
