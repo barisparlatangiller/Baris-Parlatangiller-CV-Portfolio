@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Baris Parlatangiller · CV</title>
   <meta name="description" content="CV of Baris Parlatangiller, Senior GIS & Geospatial Analyst and Urban & Regional Planner, Frankfurt am Main.">
+  <meta property="og:title" content="Baris Parlatangiller · CV">
+  <meta property="og:image" content="https://barisparlatangiller.github.io/Baris-Parlatangiller-CV-Portfolio/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/cv.css">
 </head>
 <body>
@@ -18,7 +20,8 @@
       <span class="mono lbl" data-i18n="cv.focus"></span>
       <div class="seg" role="group" aria-label="Focus" id="focusSeg"></div>
       <div class="seg" role="group" aria-label="Language"><button data-lang="en">EN</button><button data-lang="de">DE</button><button data-lang="tr">TR</button></div>
-      <button class="print" onclick="window.print()" data-i18n="cv.print"></button>
+      <a class="print" id="cvPdf" download data-i18n="cv.pdf"></a>
+      <button class="printb" onclick="window.print()" data-i18n="cv.print"></button>
     </div>
   </div>
 

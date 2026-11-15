@@ -236,4 +236,9 @@
   initLab($("#plaza"), { mean: $("#rMean"), max: $("#rMax"), shade: $("#rShade"), delta: $("#rDelta"), tools: $("#tools"), reset: $("#labReset"), green: $("#labGreen") });
   I.onChange(() => { renderAll(); });
   addEventListener("load", () => Scroll.sizeFolio());
+  // deep link to a single project board: #biserinlik or #biserinlik/2
+  (function () {
+    const m = decodeURIComponent(location.hash.slice(1)).split("/"), i = A.folio.findIndex(p => p.id === m[0]);
+    if (i >= 0) setTimeout(() => BoardViewer.open(A.folio, i, +m[1] || 0), 400);
+  })();
 })();

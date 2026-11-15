@@ -19,18 +19,28 @@ The site is designed like a Swiss International Style magazine, made for someone
 | **01 Route** | The career drawn as a route on a bare graticule. The timeline drives the map. |
 | **02 Layers** | Skills as a GIS layer panel, linked to the roles and projects that prove them. |
 | **03 Works** | Two in-depth case studies (Frankfurt heat stress, #30DayMapChallenge) plus further work and awards. |
-| **Folio** | The sixteen projects of the 2026 portfolio in a pinned horizontal gallery. Every image opens its full A3 board in a map-style viewer with zoom and pan. |
+| **Folio** | The sixteen projects of the 2026 portfolio in a pinned horizontal gallery. Every image opens its full A3 board in a map-style viewer with zoom and pan, and a **guided tour** flies from the whole board to three details and explains each one. |
 | **04 Lab** | *Cool a square*: paint trees, water and grass on a plaza and watch a simple surface temperature model react. |
 | **05 Index** | Every public map repository, filterable and searchable. |
 | **06 Contact** | A Klein blue panel that grows open as you scroll. |
 
 Press **G** anywhere to see the 12 column grid.
 
+### Links for applications
+
+| Link | Opens |
+|---|---|
+| `…/Baris-Parlatangiller-CV-Portfolio/` | the full atlas |
+| `…/cv.html?lang=de&focus=gis` | the CV in German, GIS focus (`lang`: en, de, tr · `focus`: gis, plan) |
+| `…/#biserinlik` | a single project board, opened in the viewer |
+| `…/#biserinlik/2` | the same board, zoomed into detail 2 of the guided tour |
+| `…/assets/cv/Baris-Parlatangiller-CV-GIS-EN.pdf` | ready-made PDF (GIS or Planning, EN, DE or TR) |
+
 The **CV page** (`cv.html`) is calm, semantic and ATS friendly, with print to PDF built in. A **Focus** switch toggles between the GIS reading and the urban planning reading of the same career.
 
 ## Why no framework?
 
-The site is plain HTML, CSS and JavaScript. There is no build step and no dependencies apart from Google Fonts.
+The site is plain HTML, CSS and JavaScript. There is no build step and no external dependencies. Fonts (Archivo and JetBrains Mono, SIL Open Font License) are self-hosted, so the site makes no third party requests.
 
 - It deploys on GitHub Pages as-is: push and it's live.
 - It opens straight from the file system for editing (`index.html` works without a server).
@@ -43,7 +53,9 @@ The site is plain HTML, CSS and JavaScript. There is no build step and no depend
 - **New GitHub project:** add one line to `repos` at the bottom of the file. The index and the stats update automatically.
 - **New job:** add an object to `experience`, with `places` (keys from `places`) and `layers` (skill ids).
 - **Folio projects:** add an entry to `folio` and put `<id>.webp` (cover) and `<id>-board.webp` (full board) in `assets/img/folio/`.
+- **Guided tours:** [`data/tours.js`](data/tours.js), three regions per board with captions in three languages.
 - **Interface wording:** [`data/ui.js`](data/ui.js).
+- **CV PDFs:** after changing the CV, print `cv.html` to PDF again (or ask for the PDFs to be regenerated) and replace the files in `assets/cv/`.
 
 ## Structure
 

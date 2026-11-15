@@ -1,6 +1,7 @@
 /* Interface strings. Keys are used via data-i18n="key" in HTML or I18N.T("key") in JS. */
 window.UI = {
   en: {
+    "vw.tour": "Guided tour", "vw.whole": "Whole board", "vw.start": "Start the tour", "vw.next": "Next detail", "vw.again": "Back to the whole board",
     "nav.cv": "CV",
     "fig.title": "Fig. 1. Surface heat on a one metre grid. Your cursor is a tree.",
     "fig.sun": "It is {time} in Frankfurt and the sun stands at {alt}°. A ten metre tree casts {len} m of shade to the {dir}.",
@@ -54,10 +55,11 @@ window.UI = {
 
     "cv.back": "Back to the atlas", "cv.print": "Print or save as PDF", "cv.focus": "Focus",
     "cv.profile": "Profile", "cv.experience": "Experience", "cv.skills": "Skills", "cv.education": "Education", "cv.projects": "Selected projects", "cv.languages": "Languages", "cv.awards": "Awards",
-    "cv.links": "Links", "cv.updated": "Updated"
+    "cv.links": "Links", "cv.updated": "Updated", "cv.pdf": "Download PDF"
   },
 
   de: {
+    "vw.tour": "Geführte Tour", "vw.whole": "Ganze Tafel", "vw.start": "Tour starten", "vw.next": "Nächstes Detail", "vw.again": "Zurück zur ganzen Tafel",
     "nav.cv": "Lebenslauf",
     "fig.title": "Abb. 1. Oberflächenhitze im Ein-Meter-Raster. Dein Cursor ist ein Baum.",
     "fig.sun": "In Frankfurt ist es {time} Uhr und die Sonne steht auf {alt}°. Ein zehn Meter hoher Baum wirft gerade {len} m Schatten nach {dir}.",
@@ -111,10 +113,11 @@ window.UI = {
 
     "cv.back": "Zurück zum Atlas", "cv.print": "Drucken oder als PDF speichern", "cv.focus": "Schwerpunkt",
     "cv.profile": "Profil", "cv.experience": "Berufserfahrung", "cv.skills": "Kompetenzen", "cv.education": "Ausbildung", "cv.projects": "Ausgewählte Projekte", "cv.languages": "Sprachen", "cv.awards": "Auszeichnungen",
-    "cv.links": "Links", "cv.updated": "Stand"
+    "cv.links": "Links", "cv.updated": "Stand", "cv.pdf": "PDF herunterladen"
   },
 
   tr: {
+    "vw.tour": "Rehberli tur", "vw.whole": "Paftanın tamamı", "vw.start": "Turu başlat", "vw.next": "Sonraki detay", "vw.again": "Paftanın tamamına dön",
     "nav.cv": "Özgeçmiş",
     "fig.title": "Şekil 1. Bir metrelik ızgarada yüzey ısısı. İmlecin bir ağaç.",
     "fig.sun": "Frankfurt'ta saat {time} ve güneş {alt}° yükseklikte. On metrelik bir ağaç şu an {dir} yönüne {len} m gölge düşürüyor.",
@@ -168,6 +171,6 @@ window.UI = {
 
     "cv.back": "Atlasa dön", "cv.print": "Yazdır veya PDF olarak kaydet", "cv.focus": "Odak",
     "cv.profile": "Profil", "cv.experience": "Deneyim", "cv.skills": "Yetkinlikler", "cv.education": "Eğitim", "cv.projects": "Seçilmiş projeler", "cv.languages": "Diller", "cv.awards": "Ödüller",
-    "cv.links": "Bağlantılar", "cv.updated": "Güncelleme"
+    "cv.links": "Bağlantılar", "cv.updated": "Güncelleme", "cv.pdf": "PDF indir"
   }
 };

@@ -8,11 +8,15 @@
   <meta property="og:title" content="Baris Parlatangiller · Atlas of Work">
   <meta property="og:description" content="Spatial analyst & urban planner · Raumanalytiker & Stadtplaner · Mekânsal analist & şehir plancısı">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://barisparlatangiller.github.io/Baris-Parlatangiller-CV-Portfolio/">
+  <meta property="og:image" content="https://barisparlatangiller.github.io/Baris-Parlatangiller-CV-Portfolio/assets/og.png">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://barisparlatangiller.github.io/Baris-Parlatangiller-CV-Portfolio/">
   <meta name="theme-color" content="#D8D8D3">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -187,11 +191,16 @@
   </main>
 
   <dialog class="viewer" id="viewer" aria-label="Project board">
-    <div class="vw-stage" id="vwStage"><img id="vwImg" alt="" draggable="false"></div>
+    <div class="vw-stage" id="vwStage"><img id="vwImg" alt="" draggable="false"><p class="vw-cap" id="vwCap" aria-live="polite"></p></div>
     <aside class="vw-side">
       <p class="mono" id="vwMeta"></p>
       <h3 id="vwTitle"></h3>
       <p id="vwText"></p>
+      <div class="vw-tour">
+        <p class="mono" data-i18n="vw.tour"></p>
+        <ol id="vwStops"></ol>
+        <button class="btn btn-paper" id="vwStep"></button>
+      </div>
       <div class="vw-ctl">
         <button class="btn btn-klein" id="vwPrev" aria-label="Previous">←</button>
         <button class="btn btn-klein" id="vwNext" aria-label="Next">→</button>
@@ -212,6 +221,7 @@
 
   <script src="data/ui.js"></script>
   <script src="data/content.js"></script>
+  <script src="data/tours.js"></script>
   <script src="assets/js/i18n.js"></script>
   <script src="assets/js/sun.js"></script>
   <script src="assets/js/field.js"></script>

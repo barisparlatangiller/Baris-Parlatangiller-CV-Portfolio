@@ -10,6 +10,7 @@
   function render() {
     const P = A.person, F = A.focus[focus];
     document.title = `${P.name} · CV`;
+    document.getElementById("cvPdf").href = `assets/cv/Baris-Parlatangiller-CV-${focus === "plan" ? "Planning" : "GIS"}-${I.lang.toUpperCase()}.pdf`;
     document.getElementById("focusSeg").innerHTML = Object.entries(A.focus).map(([k, f]) => `<button data-focus="${k}" aria-pressed="${k === focus}">${esc(L(f.label))}</button>`).join("");
 
     const exp = A.experience.map(e => `
@@ -32,7 +33,7 @@
           <li><a href="mailto:${P.email}">${P.email}</a></li>
           <li><a href="${P.links.linkedin}">linkedin.com/in/baris-parlatangiller</a></li>
           <li><a href="${P.links.github}">github.com/barisparlatangiller</a></li>
-          <li><a href="${P.links.maps}">barisparlatangiller.github.io</a></li>
+          <li><a href="https://barisparlatangiller.github.io/Baris-Parlatangiller-CV-Portfolio/">Portfolio: barisparlatangiller.github.io/Baris-Parlatangiller-CV-Portfolio</a></li>
         </ul>
       </header>
 
