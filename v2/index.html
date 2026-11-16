@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Baris Parlatangiller · Career Twin</title>
+  <meta name="description" content="Spatial analyst and urban planner. A 3D map of every role, project and map across ten countries, down to a one metre heat model of Frankfurt.">
+  <meta property="og:title" content="Baris Parlatangiller · Career Twin">
+  <meta property="og:description" content="Fly through ten countries of work, down to a 1 m heat model of Frankfurt's Altstadt.">
+  <meta property="og:image" content="https://barisparlatangiller.github.io/Baris-Parlatangiller-CV-Portfolio/v2/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#05060A">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/fonts.css">
+  <link rel="stylesheet" href="css/v2.css">
+</head>
+<body>
+  <div id="map" aria-label="3D map of the work"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- intro -->
+  <section class="intro" id="intro">
+    <p class="mono k">Career Twin · Nº 02/2026</p>
+    <h1><span>Baris</span><span>Parlatangiller</span></h1>
+    <p class="intro-role" data-i18n="v2.role"></p>
+    <p class="intro-text" id="introText"></p>
+    <div class="intro-ctas">
+      <button class="b b-klein" id="introTour"><i class="play"></i><span data-i18n="v2.tour"></span></button>
+      <button class="b b-line" id="introEnter" data-i18n="v2.enter"></button>
+    </div>
+    <dl class="intro-stats" id="introStats"></dl>
+    <p class="mono intro-hint" data-i18n="v2.hint"></p>
+  </section>
+
+  <!-- HUD -->
+  <header class="hud-top">
+    <a class="mark" href="./"><b>BP</b><span><span class="mark-name">Baris Parlatangiller</span><span class="mark-role" data-i18n="v2.role"></span></span></a>
+    <nav class="crumbs mono" id="crumbs" aria-label="Location"></nav>
+    <div class="top-right">
+      <button class="kbd" id="cmdOpen" aria-label="Search"><span data-i18n="v2.search"></span><kbd>⌘K</kbd></button>
+      <div class="seg" role="group" aria-label="Language"><button data-lang="en">EN</button><button data-lang="de">DE</button><button data-lang="tr">TR</button></div>
+      <a class="toplink" href="../cv.html" data-keep-lang data-i18n="v2.cv"></a>
+      <a class="toplink dim" href="../" data-keep-lang data-i18n="v2.classic"></a>
+    </div>
+  </header>
+
+  <aside class="hud-left">
+    <p class="mono lbl" data-i18n="v2.lens"></p>
+    <div class="lenses" id="lenses">
+      <button data-lens="map" aria-pressed="true"><kbd>1</kbd><span data-i18n="v2.lens.map"></span></button>
+      <button data-lens="time"><kbd>2</kbd><span data-i18n="v2.lens.time"></span></button>
+      <button data-lens="skill"><kbd>3</kbd><span data-i18n="v2.lens.skill"></span></button>
+    </div>
+    <p class="mono lbl" data-i18n="v2.scale"></p>
+    <ol class="ladder" id="ladder">
+      <li><button data-level="world"><i></i><span data-i18n="v2.l.world"></span></button></li>
+      <li><button data-level="region"><i></i><span data-i18n="v2.l.region"></span></button></li>
+      <li><button data-level="city"><i></i><span data-i18n="v2.l.city"></span></button></li>
+      <li><button data-level="square"><i></i><span data-i18n="v2.l.square"></span></button></li>
+    </ol>
+  </aside>
+
+  <footer class="hud-bottom">
+    <div class="legend" id="legend"></div>
+    <button class="b b-klein tourbtn" id="tourBtn"><i class="play"></i><span data-i18n="v2.tour"></span></button>
+    <div class="readout mono"><span id="coords">50.1109° N · 8.6821° E</span><span id="ratio">1 : 25 000 000</span></div>
+  </footer>
+
+  <!-- heat level controls -->
+  <div class="heat-hud" id="heatHud" hidden>
+    <p class="mono" data-i18n="v2.heat.day"></p>
+    <h3 data-i18n="v2.heat.title"></h3>
+    <div class="hour"><span class="mono" data-i18n="v2.heat.hour"></span><input type="range" id="hour" min="8" max="19" value="15" step="1"><output id="hourOut">15:00</output></div>
+    <div class="ramp"><i></i><span class="mono"><b id="rampLo">10</b><span data-i18n="v2.heat.legend"></span><b id="rampHi">75</b></span></div>
+    <p class="note" data-i18n="v2.heat.note"></p>
+  </div>
+  <div class="loader mono" id="loader" hidden><i></i><span data-i18n="v2.heat.loading"></span></div>
+
+  <!-- detail panel -->
+  <aside class="panel" id="panel" aria-live="polite"><button class="x" id="panelX" aria-label="Close">×</button><div id="panelBody"></div></aside>
+
+  <!-- hover chip -->
+  <div class="chip" id="chip" role="status"></div>
+
+  <!-- tour caption -->
+  <div class="tourcap" id="tourCap" hidden>
+    <div class="tourbar"><i id="tourBar"></i></div>
+    <p class="mono" id="tourStep"></p>
+    <p class="tourtext" id="tourText"></p>
+    <div class="tourctl"><button class="b b-paper" id="tourNext" data-i18n="v2.tour.next"></button><button class="b b-line" id="tourSkip" data-i18n="v2.tour.skip"></button></div>
+  </div>
+  <div class="endcard" id="endCard" hidden>
+    <h2 data-i18n="v2.end.title"></h2>
+    <p data-i18n="v2.end.text"></p>
+    <div class="intro-ctas">
+      <a class="b b-klein" id="endCv" href="../cv.html" data-keep-lang data-i18n="v2.cv"></a>
+      <a class="b b-line" id="endPdf" download>PDF</a>
+      <button class="b b-line" id="endExplore" data-i18n="v2.end.explore"></button>
+    </div>
+  </div>
+
+  <!-- command palette -->
+  <div class="cmdk" id="cmdk" hidden>
+    <div class="cmdk-box" role="dialog" aria-label="Search">
+      <input id="cmdInput" data-i18n-ph="v2.search" autocomplete="off" spellcheck="false">
+      <ul id="cmdList" role="listbox"></ul>
+    </div>
+  </div>
+
+  <!-- board viewer (shared with the classic version) -->
+  <dialog class="viewer" id="viewer" aria-label="Project board">
+    <div class="vw-stage" id="vwStage"><img id="vwImg" alt="" draggable="false"><p class="vw-cap" id="vwCap" aria-live="polite"></p></div>
+    <aside class="vw-side">
+      <p class="mono" id="vwMeta"></p>
+      <h3 id="vwTitle"></h3>
+      <p id="vwText"></p>
+      <div class="vw-tour"><p class="mono" data-i18n="vw.tour"></p><ol id="vwStops"></ol><button class="b b-paper" id="vwStep"></button></div>
+      <div class="vw-ctl">
+        <button class="b b-klein" id="vwPrev" aria-label="Previous">←</button>
+        <button class="b b-klein" id="vwNext" aria-label="Next">→</button>
+        <button class="b b-line" id="vwFit" data-i18n="vw.fit"></button>
+        <button class="b b-line" id="vwClose" data-i18n="vw.close"></button>
+      </div>
+      <p class="mono vw-hint" data-i18n="vw.hint"></p>
+      <div class="vw-scale mono"><i></i><span id="vwZoom">100%</span></div>
+    </aside>
+  </dialog>
+
+  <div class="nogl" id="nogl" hidden><p data-i18n="v2.nogl"></p><a class="b b-klein" href="../" data-keep-lang data-i18n="v2.classic"></a></div>
+
+  <script>window.ASSET_BASE = "../";</script>
+  <script src="../data/ui.js"></script>
+  <script src="js/strings.js"></script>
+  <script src="../data/content.js"></script>
+  <script src="../data/tours.js"></script>
+  <script src="../data/places.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/sun.js"></script>
+  <script src="js/vendor/deck.min.js"></script>
+  <script src="../assets/js/viewer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

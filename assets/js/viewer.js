@@ -48,7 +48,7 @@ window.BoardViewer = (function () {
     idx = (i + list.length) % list.length; const p = list[idx], L = I18N.L;
     stop = 0; pendingStop = startStop; $("vwCap").classList.remove("on");
     img.onload = () => { fit(false); if (pendingStop) setTimeout(() => goStop(pendingStop), 350); };
-    img.src = `assets/img/folio/${p.id}-board.webp`; img.alt = L(p.title);
+    img.src = `${window.ASSET_BASE || ""}assets/img/folio/${p.id}-board.webp`; img.alt = L(p.title);
     $("vwMeta").textContent = `${String(idx + 1).padStart(2, "0")} / ${list.length} · ${L(p.place)}`;
     $("vwTitle").textContent = L(p.title); $("vwText").textContent = L(p.text);
     renderStops(); setHash();
