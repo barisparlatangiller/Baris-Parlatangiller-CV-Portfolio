@@ -1,0 +1,93 @@
+{
+  "_readme": "Source of truth for the Places atlas. Edit this file, then run: python tools/build_places.py. kind is work (a job or study), folio (a portfolio board, ref = folio id), map (a public map repo, ref = repo name) or award. Labels are short proper names and stay the same in every language.",
+  "countries": {
+    "Germany": { "en": "Germany", "de": "Deutschland", "tr": "Almanya" },
+    "Turkey": { "en": "Türkiye", "de": "Türkei", "tr": "Türkiye" },
+    "Azerbaijan": { "en": "Azerbaijan", "de": "Aserbaidschan", "tr": "Azerbaycan" },
+    "Georgia": { "en": "Georgia", "de": "Georgien", "tr": "Gürcistan" },
+    "Oman": { "en": "Oman", "de": "Oman", "tr": "Umman" },
+    "Saudi Arabia": { "en": "Saudi Arabia", "de": "Saudi-Arabien", "tr": "Suudi Arabistan" },
+    "Qatar": { "en": "Qatar", "de": "Katar", "tr": "Katar" },
+    "Spain": { "en": "Spain", "de": "Spanien", "tr": "İspanya" },
+    "United Kingdom": { "en": "United Kingdom", "de": "Vereinigtes Königreich", "tr": "Birleşik Krallık" },
+    "United States of America": { "en": "United States", "de": "Vereinigte Staaten", "tr": "Amerika Birleşik Devletleri" }
+  },
+  "places": [
+    { "id": "frankfurt", "name": "Frankfurt", "country": "Germany", "lat": 50.11, "lon": 8.68, "home": true, "items": [
+      { "kind": "work", "t": "Albert Speer + Partner, 2019 to 2024", "ref": "asp3" },
+      { "kind": "work", "t": "Independent consultant since 2025", "ref": "free" },
+      { "kind": "folio", "t": "Urban Heat Stress, Frankfurt Platz", "ref": "uhi" },
+      { "kind": "folio", "t": "Rudolfstraße", "ref": "rudolfstrasse" },
+      { "kind": "map", "t": "Land Value 2035", "ref": "30DMC26-D03-Polygons-Frankfurt-Land-Value-2035" },
+      { "kind": "map", "t": "High-Rise Shadows", "ref": "30DMC26-D05-Sight-Frankfurt-HighRise-Shadows" },
+      { "kind": "map", "t": "Square Heat", "ref": "30DMC26-D14-Borgesian-Frankfurt-Square-Heat" } ] },
+    { "id": "munich", "name": "München", "country": "Germany", "lat": 48.14, "lon": 11.58, "items": [
+      { "kind": "work", "t": "Mahl Gebhard Konzepte, 2024 to 2025", "ref": "mgk" },
+      { "kind": "map", "t": "Dachrepublik", "ref": "30DMC26-D08-Utopia-Munich-Dachrepublik" } ] },
+    { "id": "unterschleissheim", "name": "Unterschleißheim", "country": "Germany", "lat": 48.28, "lon": 11.57, "items": [
+      { "kind": "folio", "t": "Climate Risk Intelligence", "ref": "climate-risk" } ] },
+    { "id": "berlin", "name": "Berlin", "country": "Germany", "lat": 52.52, "lon": 13.40, "items": [
+      { "kind": "map", "t": "Rent vs Location", "ref": "30DMC26-D01-Points-Berlin-Rent-vs-Location" },
+      { "kind": "map", "t": "Coffee Clusters", "ref": "30DMC26-D04-Clusters-Berlin-Coffee-Clusters" },
+      { "kind": "map", "t": "Home Office", "ref": "30DMC26-D09-UrbanRural-Berlin-Homeoffice" } ] },
+    { "id": "leipzig", "name": "Leipzig", "country": "Germany", "lat": 51.34, "lon": 12.37, "items": [
+      { "kind": "map", "t": "Street Canopy Heat", "ref": "30DMC26-D02-Lines-Leipzig-Street-Canopy-Heat" },
+      { "kind": "map", "t": "Secondhand", "ref": "30DMC26-D12-Power-Leipzig-Secondhand" } ] },
+    { "id": "hamburg", "name": "Hamburg", "country": "Germany", "lat": 53.55, "lon": 9.99, "items": [
+      { "kind": "map", "t": "The City Is Lava", "ref": "30DMC26-D13-Interactions-Hamburg-City-Is-Lava" },
+      { "kind": "award", "t": "Reimagine Elbphilharmonie, finalist" } ] },
+    { "id": "koblenz", "name": "Koblenz", "country": "Germany", "lat": 50.36, "lon": 7.59, "items": [
+      { "kind": "map", "t": "Invisible Lake", "ref": "30DMC26-D15-InsideOut-Koblenz-Invisible-Lake" } ] },
+
+    { "id": "izmir", "name": "İzmir", "country": "Turkey", "lat": 38.42, "lon": 27.14, "home": true, "items": [
+      { "kind": "work", "t": "Dokuz Eylül University, 2014 to 2018", "ref": "deu" },
+      { "kind": "work", "t": "BEB Development Agency, 2018 to 2019", "ref": "beb" },
+      { "kind": "work", "t": "SINIR Planning, 2021", "ref": "sinir" },
+      { "kind": "work", "t": "Municipality of Konak, 2021 to 2022", "ref": "konak" },
+      { "kind": "folio", "t": "#BiSerinlikLazım, Bayraklı", "ref": "biserinlik" },
+      { "kind": "folio", "t": "Bostanlı Climate Corridor", "ref": "bostanli" },
+      { "kind": "folio", "t": "Tactical Urbanism, Alsancak", "ref": "tactical-cooling" } ] },
+    { "id": "istanbul", "name": "İstanbul", "country": "Turkey", "lat": 41.01, "lon": 28.98, "items": [
+      { "kind": "folio", "t": "Watershed Resilience Framework", "ref": "watershed" },
+      { "kind": "map", "t": "Old Names", "ref": "30DMC26-D06-Vintage-Istanbul-Old-Names" } ] },
+    { "id": "sakarya", "name": "Sakarya", "country": "Turkey", "lat": 40.78, "lon": 30.40, "items": [
+      { "kind": "work", "t": "Sakarya 2040 regional strategy", "ref": "beb" } ] },
+    { "id": "bilecik", "name": "Bilecik", "country": "Turkey", "lat": 40.14, "lon": 29.98, "items": [
+      { "kind": "work", "t": "Bilecik 2050 regional strategy", "ref": "beb" } ] },
+    { "id": "bodrum", "name": "Bodrum", "country": "Turkey", "lat": 37.03, "lon": 27.43, "items": [
+      { "kind": "award", "t": "Bodrum Urban Design, first prize" } ] },
+    { "id": "kayakoy", "name": "Kayaköy", "country": "Turkey", "lat": 36.58, "lon": 29.09, "items": [
+      { "kind": "folio", "t": "AVLU, Living Ruins", "ref": "avlu-kayakoy" } ] },
+
+    { "id": "baku", "name": "Baku", "country": "Azerbaijan", "lat": 40.41, "lon": 49.87, "items": [
+      { "kind": "folio", "t": "Baku 2040 Masterplan, ISOCARP Award", "ref": "baku-2040" },
+      { "kind": "work", "t": "Albert Speer + Partner, 2019 to 2020", "ref": "asp1" } ] },
+    { "id": "tbilisi", "name": "Tbilisi", "country": "Georgia", "lat": 41.72, "lon": 44.79, "items": [
+      { "kind": "folio", "t": "Mosaic Pubvate, Eliava Bazaar finalist", "ref": "mosaic-pubvate" },
+      { "kind": "work", "t": "Strategic planning with Albert Speer + Partner", "ref": "asp2" } ] },
+    { "id": "nizwa", "name": "Nizwa", "country": "Oman", "lat": 22.93, "lon": 57.53, "items": [
+      { "kind": "folio", "t": "Nizwa Master Plan 2040", "ref": "nizwa-2040" },
+      { "kind": "work", "t": "Strategic planning with Albert Speer + Partner", "ref": "asp2" } ] },
+    { "id": "wadi-andam", "name": "Wadi Andam Halfayn", "country": "Oman", "lat": 22.45, "lon": 58.35, "items": [
+      { "kind": "folio", "t": "Landscape Zoning Strategy", "ref": "wadi-landscape" } ] },
+    { "id": "saudi", "name": "Saudi Arabia", "country": "Saudi Arabia", "lat": 24.71, "lon": 46.68, "region": true, "items": [
+      { "kind": "work", "t": "Mobility and infrastructure planning with Albert Speer + Partner", "ref": "asp2" } ] },
+    { "id": "qatar", "name": "Qatar", "country": "Qatar", "lat": 25.29, "lon": 51.53, "region": true, "items": [
+      { "kind": "work", "t": "Mobility and infrastructure planning with Albert Speer + Partner", "ref": "asp2" } ] },
+    { "id": "valencia", "name": "Valencia", "country": "Spain", "lat": 39.47, "lon": -0.38, "items": [
+      { "kind": "folio", "t": "Bodegas Vinival", "ref": "bodegas-vinival" } ] },
+    { "id": "london", "name": "London", "country": "United Kingdom", "lat": 51.51, "lon": -0.13, "items": [
+      { "kind": "map", "t": "Manifest Stage", "ref": "30DMC26-D25-IsThisAMap-London-Manifest-Stage" } ] },
+    { "id": "new-york", "name": "New York", "country": "United States of America", "lat": 40.71, "lon": -74.0, "items": [
+      { "kind": "map", "t": "NYC Pulse", "ref": "30DMC26-D10-PromptingOnly-NYC-Pulse" } ] }
+  ],
+  "elsewhere": [
+    { "kind": "folio", "t": "Kızıl Yamaç AgroPilot, on Mars", "ref": "kizil-yamac" },
+    { "kind": "folio", "t": "GIS Planning Scenario Platform, 35 districts", "ref": "scenario-platform" },
+    { "kind": "folio", "t": "The New Stage Is Urban Nature", "ref": "new-stage" },
+    { "kind": "folio", "t": "Cubic Flux", "ref": "cubic-flux" },
+    { "kind": "map", "t": "Christmas Markets of Europe", "ref": "30DMC26-D07-10MinuteMap-Europe-Christmas-Markets" },
+    { "kind": "map", "t": "World Music Charts", "ref": "30DMC26-D11-Sound-World-Music-Charts" }
+  ],
+  "route": ["izmir", "frankfurt", "izmir", "frankfurt", "munich", "frankfurt"]
+}

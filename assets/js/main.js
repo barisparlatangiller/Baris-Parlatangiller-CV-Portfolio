@@ -30,41 +30,7 @@
     ...A.education.map(e => ({ ...e, kind: "edu" })),
     ...A.experience.map(e => ({ ...e, kind: "job" }))
   ];
-  let selected = A.experience[0].id;
-
-  function drawMap() {
-    const svg = $("#routeMap"); let s = "";
-    for (let lon = 5; lon <= 60; lon += 5) { const [x] = proj(0, lon); s += `<line class="grat" x1="${x}" y1="0" x2="${x}" y2="${VH}"/>${lon % 10 === 0 ? `<text class="grat-label" x="${x + 4}" y="${VH - 6}">${lon}°E</text>` : ""}`; }
-    for (let lat = 20; lat <= 55; lat += 5) { const [, y] = proj(lat, 0); s += `<line class="grat" x1="0" y1="${y}" x2="${VW}" y2="${y}"/><text class="grat-label" x="4" y="${y - 4}">${lat}°N</text>`; }
-    // life route in time order
-    const seq = ["izmir", "frankfurt", "izmir", "frankfurt", "munich", "frankfurt"];
-    let d = "";
-    seq.forEach((p, i) => {
-      const [x, y] = proj(A.places[p].lat, A.places[p].lon);
-      if (i === 0) { d += `M${x},${y}`; return; }
-      const [px, py] = proj(A.places[seq[i - 1]].lat, A.places[seq[i - 1]].lon);
-      const dx = x - px, dy = y - py, dist = Math.hypot(dx, dy);
-      const k = (i % 2 ? -1 : 1) * (.12 + i * .045) * dist;          // bend grows with each trip
-      const mx = (px + x) / 2 - dy / dist * k, my = (py + y) / 2 + dx / dist * k;
-      d += ` Q${mx},${my} ${x},${y}`;
-    });
-    s += `<path class="route" id="lifeRoute" d="${d}"/>`;
-    // project arcs from Frankfurt
-    const [fx, fy] = proj(A.places.frankfurt.lat, A.places.frankfurt.lon);
-    ["baku", "tbilisi", "muscat", "riyadh", "doha"].forEach(p => {
-      const [x, y] = proj(A.places[p].lat, A.places[p].lon);
-      s += `<path class="arc" d="M${fx},${fy} Q${(fx + x) / 2},${Math.min(fy, y) - 90} ${x},${y}"/>`;
-    });
-    const labelPos = { munich: [12, 18], frankfurt: [-12, -14, "end"], sakarya: [12, -10], bilecik: [12, 16], izmir: [-12, 4, "end"], bodrum: [12, 16], doha: [12, 4], riyadh: [-12, 4, "end"], muscat: [12, 4], baku: [12, 4], tbilisi: [-12, -8, "end"] };
-    Object.entries(A.places).forEach(([id, p]) => {
-      const [x, y] = proj(p.lat, p.lon); const [dx, dy, an] = labelPos[id] || [12, 4];
-      s += `<g class="pt" data-place="${id}"><circle class="ring" cx="${x}" cy="${y}" r="6"/><circle class="dot" cx="${x}" cy="${y}" r="5"/><text x="${x + dx}" y="${y + dy}" text-anchor="${an || "start"}">${esc(p.name)}</text></g>`;
-    });
-    svg.innerHTML = s;
-    const route = $("#lifeRoute"), len = route.getTotalLength();
-    route.style.strokeDasharray = len; route.style.strokeDashoffset = len;
-    new IntersectionObserver(([en], o) => { if (en.isIntersecting) { route.style.transition = "stroke-dashoffset 2.6s cubic-bezier(.2,.7,.1,1)"; route.style.strokeDashoffset = 0; o.disconnect(); } }, { threshold: .3 }).observe(svg);
-  }
+  let selected = A.experience[0].id, picked = false;
 
   function renderGantt() {
     const y0 = 2014, y1 = new Date().getFullYear() + 1, span = y1 - y0;
@@ -89,23 +55,16 @@
         <div class="tags">${st.layers.map(id => `<span class="tag"><i style="background:${layerById[id].color}"></i>${esc(L(layerById[id].name))}</span>`).join("")}</div>`;
     }
     const el = $("#itDetail"); el.innerHTML = html; el.classList.remove("swap"); void el.offsetWidth; el.classList.add("swap");
-    document.querySelectorAll("#routeMap .pt").forEach(g => {
-      const on = st.places.includes(g.dataset.place);
-      g.classList.toggle("hot", on); g.classList.toggle("dim", !on);
-    });
+    if (picked) Places.highlight(st.places);
   }
 
   $("#gantt").addEventListener("click", e => {
     const b = e.target.closest(".barbtn"); if (!b) return;
-    selected = b.dataset.id;
+    selected = b.dataset.id; picked = true;
     document.querySelectorAll(".barbtn").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
     renderDetail();
   });
-  $("#routeMap").addEventListener("click", e => {
-    const g = e.target.closest(".pt"); if (!g) return;
-    const st = stations.slice().reverse().find(s => s.places.includes(g.dataset.place));
-    if (st) { selected = st.id; renderGantt(); renderDetail(); }
-  });
+  window.selectStation = id => { if (!stations.find(x => x.id === id)) return; selected = id; picked = true; renderGantt(); renderDetail(); };
 
   /* ---------------- 02 layers ---------------- */
   const active = new Set(A.layers.map(l => l.id));
@@ -228,8 +187,8 @@
   /* ---------------- boot ---------------- */
   let lastSun = Sun.position();
   function renderAll() { renderStats(); renderSun(lastSun); renderGantt(); renderDetail(); renderLayers(); renderWorks(); renderFolio(); renderIndex(); renderContact(); }
-  I.apply(); drawMap(); renderAll();
-  document.querySelectorAll(".sh, .gantt, .ly-grid, .lab-grid, .ix-wrap, .ct-links, .tri, .numeral, .toc").forEach(el => el.classList.add("rv"));
+  I.apply(); Places.init(); renderAll();
+  document.querySelectorAll(".sh, .pl-totals, .ly-grid, .lab-grid, .ix-wrap, .ct-links, .tri, .numeral, .toc").forEach(el => el.classList.add("rv"));
   observeReveal();
   Scroll.init();
   initField($("#field"), sun => { lastSun = sun; renderSun(sun); });

@@ -1,0 +1,137 @@
+"""
+build_places.py — builds the data behind the Places atlas on the website.
+
+    python tools/build_places.py
+
+Reads   tools/places.json              every place, country and project (edit this)
+        tools/data/countries-50m.json  Natural Earth 1:50m countries (world-atlas TopoJSON)
+Writes  data/places.js                 a small JS file the static site loads
+
+What it does
+  1. Loads Natural Earth countries with GeoPandas.
+  2. Samples a halftone dot grid over Europe, the Middle East and the Gulf on an
+     equal-spacing grid (longitude stretched by cos(mean latitude), so dots are square
+     on screen), and tags each dot with the country it falls in. Countries that appear
+     in the work get their own code, so the site can light them up.
+  3. Computes totals: countries, places, entries by kind.
+  4. Measures the career route with geodesic distances on the WGS84 ellipsoid (pyproj),
+     plus the two places furthest apart.
+
+Requires: geopandas, shapely, pyproj (pip install geopandas pyproj)
+"""
+from __future__ import annotations
+
+import json
+import math
+from itertools import combinations
+from pathlib import Path
+
+import geopandas as gpd
+import numpy as np
+from pyproj import Geod
+from shapely.geometry import Point
+
+ROOT = Path(__file__).resolve().parent.parent
+SRC = ROOT / "tools" / "places.json"
+NE = ROOT / "tools" / "data" / "countries-50m.json"
+OUT = ROOT / "data" / "places.js"
+
+# Map window: open Atlantic in the west (room for the New York arrow), the Omani coast in the east.
+LON0, LON1, LAT0, LAT1 = -24.0, 64.0, 15.0, 61.0
+STEP_LAT = 0.55                               # degrees between dot rows
+MEAN_LAT = (LAT0 + LAT1) / 2
+STEP_LON = STEP_LAT / math.cos(math.radians(MEAN_LAT))   # square spacing on screen
+
+GEOD = Geod(ellps="WGS84")
+
+
+def load_countries() -> gpd.GeoDataFrame:
+    world = gpd.read_file(NE, layer="countries")
+    world = world[["name", "geometry"]].set_crs(4326, allow_override=True)
+    world["geometry"] = world.geometry.make_valid()
+    return world
+
+
+def dot_grid(world: gpd.GeoDataFrame, codes: dict[str, str]) -> list[str]:
+    """One string per row; ' ' sea, '1' other land, a letter for countries in the work."""
+    lats = np.arange(LAT1 - STEP_LAT / 2, LAT0, -STEP_LAT)
+    lons = np.arange(LON0 + STEP_LON / 2, LON1, STEP_LON)
+    pts = gpd.GeoDataFrame(
+        {"r": np.repeat(np.arange(len(lats)), len(lons)), "c": np.tile(np.arange(len(lons)), len(lats))},
+        geometry=[Point(x, y) for y in lats for x in lons], crs=4326,
+    )
+    hit = gpd.sjoin(pts, world, how="left", predicate="within").drop_duplicates(subset=["r", "c"])
+    grid = [[" "] * len(lons) for _ in lats]
+    for r, c, name in zip(hit["r"], hit["c"], hit["name"]):
+        if isinstance(name, str):
+            grid[r][c] = codes.get(name, "1")
+    return ["".join(row) for row in grid]
+
+
+def km(a: dict, b: dict) -> float:
+    _, _, d = GEOD.inv(a["lon"], a["lat"], b["lon"], b["lat"])
+    return d / 1000
+
+
+def main() -> None:
+    src = json.loads(SRC.read_text(encoding="utf-8"))
+    places = src["places"]
+    world = load_countries()
+
+    # sanity check: every place must sit inside (or within 30 km of) its declared country
+    for p in places:
+        poly = world.loc[world["name"] == p["country"], "geometry"]
+        if poly.empty:
+            raise SystemExit(f"Unknown country '{p['country']}' for {p['id']}")
+        if not poly.iloc[0].buffer(0.3).contains(Point(p["lon"], p["lat"])):
+            print(f"warning: {p['id']} looks outside {p['country']}")
+
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    codes = {name: alphabet[i] for i, name in enumerate(src["countries"])}
+    rows = dot_grid(world, codes)
+
+    by_id = {p["id"]: p for p in places}
+    route = [by_id[i] for i in src["route"]]
+    route_km = sum(km(a, b) for a, b in zip(route, route[1:]))
+    far = max(combinations(places, 2), key=lambda ab: km(*ab))
+
+    kinds: dict[str, int] = {}
+    for p in places:
+        for it in p["items"]:
+            kinds[it["kind"]] = kinds.get(it["kind"], 0) + 1
+    for it in src.get("elsewhere", []):
+        kinds[it["kind"]] = kinds.get(it["kind"], 0) + 1
+
+    used = sorted({p["country"] for p in places})
+    totals = {
+        "countries": len(used),
+        "places": sum(1 for p in places if not p.get("region")),
+        "entries": sum(kinds.values()),
+        "kinds": kinds,
+        "route_km": round(route_km),
+        "far": {"a": far[0]["id"], "b": far[1]["id"], "km": round(km(*far))},
+    }
+
+    payload = {
+        "window": {"lon0": LON0, "lon1": LON1, "lat0": LAT0, "lat1": LAT1, "stepLon": STEP_LON, "stepLat": STEP_LAT, "meanLat": MEAN_LAT},
+        "codes": {v: k for k, v in codes.items()},
+        "countries": src["countries"],
+        "dots": rows,
+        "places": places,
+        "elsewhere": src.get("elsewhere", []),
+        "route": src["route"],
+        "totals": totals,
+    }
+    OUT.write_text(
+        "/* Generated by tools/build_places.py from Natural Earth 1:50m and tools/places.json. Do not edit by hand. */\n"
+        "window.PLACES = " + json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + ";\n",
+        encoding="utf-8",
+    )
+    land = sum(len(r.replace(" ", "")) for r in rows)
+    print(f"{OUT.relative_to(ROOT)}: {len(rows)}x{len(rows[0])} grid, {land} land dots, "
+          f"{totals['countries']} countries, {totals['places']} places, {totals['entries']} entries, "
+          f"route {totals['route_km']} km, furthest {far[0]['name']} to {far[1]['name']} {totals['far']['km']} km")
+
+
+if __name__ == "__main__":
+    main()

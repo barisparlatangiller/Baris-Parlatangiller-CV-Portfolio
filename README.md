@@ -16,7 +16,7 @@ The site is designed like a Swiss International Style magazine, made for someone
 |---|---|
 | **Masthead** | One cover in three languages, like *Neue Grafik*. Fig. 1 is a halftone heat map: your cursor is a tree, and its shadow falls in the real direction of the sun over Frankfurt right now, calculated in the browser. |
 | **Powers of ten** | A pinned scroll sequence that zooms from a 400,000 ha region down to one square metre, with a live map scale. Each step is a real project. |
-| **01 Route** | The career drawn as a route on a bare graticule. The timeline drives the map. |
+| **01 Places** | Every country and city from the CV, the portfolio and the map series on a halftone map built in Python (see below), with totals, a register by country and the career timeline. Point at a place to see what happened there; the country lights up in Klein blue. |
 | **02 Layers** | Skills as a GIS layer panel, linked to the roles and projects that prove them. |
 | **03 Works** | Two in-depth case studies (Frankfurt heat stress, #30DayMapChallenge) plus further work and awards. |
 | **Folio** | The sixteen projects of the 2026 portfolio in a pinned horizontal gallery. Every image opens its full A3 board in a map-style viewer with zoom and pan, and a **guided tour** flies from the whole board to three details and explains each one. |
@@ -45,6 +45,18 @@ The site is plain HTML, CSS and JavaScript. There is no build step and no extern
 - It deploys on GitHub Pages as-is: push and it's live.
 - It opens straight from the file system for editing (`index.html` works without a server).
 - It loads fast, uses no trackers or cookies, and respects `prefers-reduced-motion`.
+
+## The Python pipeline behind the Places map
+
+The map is not drawn by hand. [`tools/build_places.py`](tools/build_places.py) uses **GeoPandas** and **Natural Earth 1:50m** to sample a halftone dot grid with square spacing on screen, tags every dot with its country through a spatial join, checks that each place really lies inside its country, and measures the career route with geodesic distances on the WGS84 ellipsoid (**pyproj**). The result is written to `data/places.js`, which the static site loads.
+
+```bash
+pip install geopandas pyproj
+python tools/build_places.py
+# data/places.js: 84x126 grid, 7139 land dots, 10 countries, 20 places, 49 entries, route 6474 km
+```
+
+To add a city or a project, edit [`tools/places.json`](tools/places.json) and run the script again.
 
 ## Updating content
 

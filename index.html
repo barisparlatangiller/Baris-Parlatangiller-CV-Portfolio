@@ -82,15 +82,29 @@
       </div>
     </section>
 
-    <!-- 01 — ROUTE (black) -->
+    <!-- 01 — PLACES (black): built by tools/build_places.py -->
     <section class="sec ink" id="route">
-      <span class="vlabel" aria-hidden="true">Route · Route · Rota</span>
-      <header class="sh"><span class="sh-no">01</span><h2 data-i18n="it.title"></h2><p class="sh-lede" data-i18n="it.lede"></p></header>
+      <span class="vlabel" aria-hidden="true">Places · Orte · Yerler</span>
+      <header class="sh"><span class="sh-no">01</span><h2 id="plTitle"></h2><p class="sh-lede" data-i18n="pl.lede"></p></header>
+      <dl class="pl-totals" id="plTotals"></dl>
+      <div class="pl-grid">
+        <figure class="pl-map" id="plMap">
+          <canvas id="plDots" aria-hidden="true"></canvas>
+          <svg id="plSvg" aria-label="Map of countries and places in the work"></svg>
+          <div class="pl-tip" id="plTip" role="status"></div>
+          <figcaption class="mono pl-cap"><span data-i18n="pl.source"></span><span id="plKinds" class="pl-kinds"></span></figcaption>
+        </figure>
+        <aside class="pl-reg">
+          <p class="mono pl-reg-h"><span data-i18n="pl.register"></span><span id="plRegCount"></span></p>
+          <ol id="plRegister"></ol>
+          <div class="pl-else" id="plElse"></div>
+        </aside>
+      </div>
+      <h3 class="pl-career mono" data-i18n="pl.career"></h3>
       <div class="it-grid">
-        <figure class="it-map"><svg id="routeMap" viewBox="0 0 1000 760" role="img" aria-label="Map of career locations"></svg></figure>
+        <div class="gantt" id="gantt" role="list"></div>
         <article class="it-detail" id="itDetail" aria-live="polite"></article>
       </div>
-      <div class="gantt" id="gantt" role="list"></div>
     </section>
 
     <!-- 02 — LAYERS (concrete) -->
@@ -222,12 +236,14 @@
   <script src="data/ui.js"></script>
   <script src="data/content.js"></script>
   <script src="data/tours.js"></script>
+  <script src="data/places.js"></script>
   <script src="assets/js/i18n.js"></script>
   <script src="assets/js/sun.js"></script>
   <script src="assets/js/field.js"></script>
   <script src="assets/js/plates.js"></script>
   <script src="assets/js/lab.js"></script>
   <script src="assets/js/viewer.js"></script>
+  <script src="assets/js/places.js"></script>
   <script src="assets/js/scroll.js"></script>
   <script src="assets/js/main.js"></script>
 </body>

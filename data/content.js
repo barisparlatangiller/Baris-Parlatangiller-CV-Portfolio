@@ -182,7 +182,7 @@ window.ATLAS = {
       org: { en: "Albert Speer + Partner", de: "Albert Speer + Partner", tr: "Albert Speer + Partner" },
       city: { en: "Frankfurt & international", de: "Frankfurt & international", tr: "Frankfurt ve uluslararası" },
       role: { en: "Team Lead, GIS and Urban Planning", de: "Teamleiter GIS und Stadtplanung", tr: "Ekip Lideri, CBS ve Şehir Planlama" },
-      places: ["frankfurt", "riyadh", "muscat", "doha"], layers: ["plan", "comm", "spatial", "data"],
+      places: ["frankfurt", "saudi", "nizwa", "qatar"], layers: ["plan", "comm", "spatial", "data"],
       bullets: {
         en: [
           "Managed a cross-functional GIS & urban planning team across multiple international projects, from task allocation to meetings and delivery schedules.",
@@ -206,7 +206,7 @@ window.ATLAS = {
       org: { en: "Albert Speer + Partner", de: "Albert Speer + Partner", tr: "Albert Speer + Partner" },
       city: { en: "Frankfurt & international", de: "Frankfurt & international", tr: "Frankfurt ve uluslararası" },
       role: { en: "GIS Specialist and Regional Planner", de: "GIS-Spezialist und Regionalplaner", tr: "CBS Uzmanı ve Bölge Plancısı" },
-      places: ["frankfurt", "muscat", "riyadh", "baku", "tbilisi", "doha"], layers: ["spatial", "plan", "data", "comm"],
+      places: ["frankfurt", "nizwa", "saudi", "tbilisi", "qatar"], layers: ["spatial", "plan", "data", "comm"],
       bullets: {
         en: [
           "Contributed to strategic planning projects in Oman, Saudi Arabia, Azerbaijan, Georgia and Qatar.",

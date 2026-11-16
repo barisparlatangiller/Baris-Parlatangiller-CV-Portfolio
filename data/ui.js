@@ -1,6 +1,10 @@
 /* Interface strings. Keys are used via data-i18n="key" in HTML or I18N.T("key") in JS. */
 window.UI = {
   en: {
+    "pl.title": "{c} countries. {p} places.", "pl.lede": "Every country and city that appears in my work, from jobs and studies to portfolio boards and public maps. Point at a place to see what happened there, or open a country in the register.",
+    "pl.countries": "countries", "pl.places": "places", "pl.entries": "roles, projects and maps", "pl.route": "km of career route", "pl.far": "km from {a} to {b}",
+    "pl.k.all": "All", "pl.k.work": "Work", "pl.k.folio": "Folio", "pl.k.map": "Maps", "pl.k.award": "Awards",
+    "pl.register": "Register", "pl.elsewhere": "Without a single address", "pl.offmap": "{km} km west", "pl.source": "Natural Earth 1:50m, sampled with GeoPandas", "pl.career": "Career, year by year", "pl.open": "Open the board", "pl.live": "Open the map", "pl.select": "Show on the timeline",
     "vw.tour": "Guided tour", "vw.whole": "Whole board", "vw.start": "Start the tour", "vw.next": "Next detail", "vw.again": "Back to the whole board",
     "nav.cv": "CV",
     "fig.title": "Fig. 1. Surface heat on a one metre grid. Your cursor is a tree.",
@@ -59,6 +63,10 @@ window.UI = {
   },
 
   de: {
+    "pl.title": "{c} Länder. {p} Orte.", "pl.lede": "Jedes Land und jede Stadt aus meiner Arbeit, von Stellen und Studium bis zu Portfoliotafeln und öffentlichen Karten. Zeig auf einen Ort, um zu sehen, was dort entstanden ist, oder öffne ein Land im Verzeichnis.",
+    "pl.countries": "Länder", "pl.places": "Orte", "pl.entries": "Stellen, Projekte und Karten", "pl.route": "km Karriereroute", "pl.far": "km von {a} bis {b}",
+    "pl.k.all": "Alle", "pl.k.work": "Arbeit", "pl.k.folio": "Folio", "pl.k.map": "Karten", "pl.k.award": "Preise",
+    "pl.register": "Verzeichnis", "pl.elsewhere": "Ohne feste Adresse", "pl.offmap": "{km} km westlich", "pl.source": "Natural Earth 1:50m, mit GeoPandas abgetastet", "pl.career": "Laufbahn, Jahr für Jahr", "pl.open": "Tafel öffnen", "pl.live": "Karte öffnen", "pl.select": "Auf der Zeitleiste zeigen",
     "vw.tour": "Geführte Tour", "vw.whole": "Ganze Tafel", "vw.start": "Tour starten", "vw.next": "Nächstes Detail", "vw.again": "Zurück zur ganzen Tafel",
     "nav.cv": "Lebenslauf",
     "fig.title": "Abb. 1. Oberflächenhitze im Ein-Meter-Raster. Dein Cursor ist ein Baum.",
@@ -117,6 +125,10 @@ window.UI = {
   },
 
   tr: {
+    "pl.title": "{c} ülke. {p} yer.", "pl.lede": "İş deneyimlerinden eğitime, portfolyo paftalarından açık haritalara kadar işlerimde geçen her ülke ve şehir burada. Bir yerin üzerine gel ve orada ne yapıldığını gör ya da dizinden bir ülkeyi aç.",
+    "pl.countries": "ülke", "pl.places": "yer", "pl.entries": "görev, proje ve harita", "pl.route": "km kariyer rotası", "pl.far": "km, {a} ile {b} arası",
+    "pl.k.all": "Tümü", "pl.k.work": "İş", "pl.k.folio": "Folio", "pl.k.map": "Haritalar", "pl.k.award": "Ödüller",
+    "pl.register": "Dizin", "pl.elsewhere": "Tek bir adresi olmayanlar", "pl.offmap": "{km} km batıda", "pl.source": "Natural Earth 1:50m, GeoPandas ile örneklendi", "pl.career": "Yıl yıl kariyer", "pl.open": "Paftayı aç", "pl.live": "Haritayı aç", "pl.select": "Zaman çizelgesinde göster",
     "vw.tour": "Rehberli tur", "vw.whole": "Paftanın tamamı", "vw.start": "Turu başlat", "vw.next": "Sonraki detay", "vw.again": "Paftanın tamamına dön",
     "nav.cv": "Özgeçmiş",
     "fig.title": "Şekil 1. Bir metrelik ızgarada yüzey ısısı. İmlecin bir ağaç.",
