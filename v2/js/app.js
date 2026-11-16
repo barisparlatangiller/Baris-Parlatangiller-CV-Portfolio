@@ -2,7 +2,7 @@
    Career Twin. One 3D map holds the whole career:
    - semantic zoom: world → region → city → one metre (real SOLWEIG data for Frankfurt)
    - three lenses on the same 49 items: Map (where), Time (when), Skills (what)
-   - a 30 second autopilot tour, a command palette, and a detail panel for everything
+   - the career as eight chapters on the map (Story), featured work, a command palette, and a detail panel for everything
    Built on deck.gl with data produced by tools/build_places.py and tools/build_v2.py.
    ========================================================================== */
 (function () {
@@ -33,8 +33,26 @@
     skill: { longitude: 26, latitude: 40, zoom: small() ? 3 : 3.9, pitch: 42, bearing: 0 }
   };
 
+  /* ---------- story: the career as chapters on the map ---------- */
+  const MAPS = "*maps";
+  const CH = [
+    { y: [2014, 2018], refs: ["deu"], base: "izmir", arcs: [], v: { longitude: 27.4, latitude: 38.7, zoom: 6.5, pitch: 55, bearing: -12 } },
+    { y: [2018, 2019.7], refs: ["beb"], base: "izmir", arcs: ["sakarya", "bilecik"], v: { longitude: 28.7, latitude: 39.4, zoom: 6.1, pitch: 55, bearing: -16 } },
+    { y: [2019.7, 2021], refs: ["asp1", "asp3", "baku-2040"], base: "frankfurt", arcs: ["baku"], v: { longitude: 29, latitude: 45, zoom: 4.05, pitch: 50, bearing: -8 } },
+    { y: [2021, 2022.4], refs: ["sinir", "konak"], base: "izmir", arcs: [], v: { longitude: 27.2, latitude: 38.45, zoom: 7.4, pitch: 58, bearing: 10 } },
+    { y: [2022.4, 2024.7], refs: ["asp2", "nizwa-2040", "wadi-landscape"], base: "frankfurt", arcs: ["tbilisi", "nizwa", "wadi-andam", "saudi", "qatar"], v: { longitude: 37.5, latitude: 36.5, zoom: 3.85, pitch: 48, bearing: -6 } },
+    { y: [2024.7, 2025.4], refs: ["mgk", "climate-risk"], base: "munich", arcs: ["unterschleissheim"], v: { longitude: 11.3, latitude: 48.5, zoom: 7.7, pitch: 58, bearing: -18 } },
+    { y: [2025.4, 2026.95], refs: ["free", "uhi", "scenario-platform", MAPS], base: "frankfurt", arcs: ["berlin", "leipzig", "hamburg", "koblenz", "munich", "london", "istanbul"], v: { longitude: 6.5, latitude: 49.3, zoom: 4.55, pitch: 52, bearing: -10 } },
+    { y: null, refs: [], base: null, arcs: [], v: { longitude: 22, latitude: 41, zoom: 3.9, pitch: 50, bearing: -10 } }
+  ];
+  const ROUTE_ARRIVE = [2, 3, 4, 5, 6];                  // chapter in which each route leg arrives
+  const FEATURED = [
+    { id: "uhi", img: "img/uhi.jpg", t: "v2.f1.t", s: "v2.f1.s", act: "v2.feat.fly", badge: "1 m · SOLWEIG", go: () => goLevel("square") },
+    { id: "baku-2040", img: "../assets/img/folio/baku-2040.webp", t: "v2.f2.t", s: "v2.f2.s", act: "v2.feat.board", badge: "ISOCARP Award", go: () => { const i = A.folio.findIndex(f => f.id === "baku-2040"); BoardViewer.open(A.folio, i, 1); } }
+  ];
+
   /* ---------- state ---------- */
-  const S = { lens: "map", view: { longitude: 28, latitude: 36, zoom: 2.3, pitch: 20, bearing: 0 }, hover: null, selected: null,
+  const S = { lens: "map", chapter: null, routeT: 500, routeTarget: 500, playing: false, view: { longitude: 28, latitude: 36, zoom: 2.3, pitch: 20, bearing: 0 }, hover: null, selected: null,
     hidden: new Set(), hour: 15, heat: null, heatImg: {}, loadingHeat: false, transitionLens: false, t0: performance.now() };
   let scene, world, items = [], places = {}, deckgl;
 
@@ -50,19 +68,14 @@
 
   /* ---------- lens geometry ---------- */
   function positions() {
-    const k = scaleK(S.view.zoom), byPlace = {}, byYear = {}, bySkill = {};
+    const k = scaleK(S.view.zoom), byPlace = {}, bySkill = {};
     return items.map(it => {
-      if (S.lens === "map") {
-        const key = it.place || "_else", n = (byPlace[key] = (byPlace[key] ?? -1) + 1);
-        const base = it.place ? [it.lon, it.lat] : ELSE;
-        if (n === 0 && it.place) return [base[0], base[1]];
-        const r = .5 * Math.sqrt(n + (it.place ? 0 : 1)) * k * (it.place ? 1 : 1.8), a = n * 2.39996;
-        return [base[0] + Math.cos(a) * r / Math.cos(base[1] * Math.PI / 180), base[1] + Math.sin(a) * r];
-      }
-      if (S.lens === "time") {
-        const y = Math.min(2026, it.year), n = (byYear[y] = (byYear[y] ?? -1) + 1);
-        if (y === 2026) return [49 + (n % 7) * 1.05, 30.5 + Math.floor(n / 7) * 1.05];
-        return [-4 + (y - 2014) * 4.1 + (n % 2) * 1.1, 30.5 + Math.floor(n / 2) * 1.1];
+      if (S.lens !== "skill") {
+        if (!it.place) return null;
+        const n = (byPlace[it.place] = (byPlace[it.place] ?? -1) + 1);
+        if (n === 0) return [it.lon, it.lat];
+        const r = .5 * Math.sqrt(n) * k, a = n * 2.39996;
+        return [it.lon + Math.cos(a) * r / Math.cos(it.lat * Math.PI / 180), it.lat + Math.sin(a) * r];
       }
       const si = SKILL_ORDER.indexOf(it.skill), n = (bySkill[it.skill] = (bySkill[it.skill] ?? -1) + 1);
       const ang = -Math.PI / 2 + si * Math.PI / 3, cx = 26 + Math.cos(ang) * 15, cy = 40 + Math.sin(ang) * 9.5;
@@ -70,10 +83,20 @@
       return [cx + Math.cos(a) * r, cy + Math.sin(a) * r * .8];
     });
   }
+  // story state of an item: 2 = current chapter, 1 = earlier, 0 = later (not yet)
+  function phase(it) {
+    if (S.lens !== "story" || S.chapter == null) return 2;
+    const c = S.chapter;
+    if (it.ch === c) return 2;
+    if (c === 7) return 1;
+    if (it.ch === 7) return 0;
+    return it.ch < c ? 1 : 0;
+  }
   function elevation(it) {
     if (S.hidden.has(it.kind)) return 0;
+    const ph = phase(it); if (ph === 0) return 0;
     const base = S.lens === "map" ? 150000 * scaleK(S.view.zoom) : 70000;
-    return it.size * base * (S.selected && S.selected.type === "item" && S.selected.item === it ? 1.35 : 1);
+    return it.size * base * (ph === 1 ? .55 : 1) * (S.selected && S.selected.type === "item" && S.selected.item === it ? 1.35 : 1);
   }
 
   /* ---------- layers ---------- */
@@ -113,50 +136,59 @@
       id: "dots", data: dotData, getPosition: d => d, getRadius: 11500, radiusMinPixels: .6, radiusMaxPixels: 3,
       getFillColor: [236, 238, 244, 70], visible: z < 9 && !inHeat
     }));
-    if (S.lens === "map" && z < 7.5) {
-      L_.push(new deck.PathLayer({ id: "route", data: [{ path: routePath }], getPath: d => d.path, getColor: [236, 238, 244, 70], widthMinPixels: 1.2, getWidth: 1 }));
+    if (S.lens !== "skill" && z < 9) {
+      const full = S.lens === "map";
       L_.push(new deck.TripsLayer({
+        id: "route", data: [{ path: routePath, ts: routeTimes }], getPath: d => d.path, getTimestamps: d => d.ts,
+        getColor: [236, 238, 244, 150], widthMinPixels: 1.6, trailLength: 1e4, fadeTrail: false, currentTime: full ? 1e4 : S.routeT
+      }));
+      if (full && !reduce) L_.push(new deck.TripsLayer({
         id: "route-comet", data: [{ path: routePath, ts: routeTimes }], getPath: d => d.path, getTimestamps: d => d.ts,
         getColor: C.lime, widthMinPixels: 3, trailLength: 120, fadeTrail: true, currentTime: ((performance.now() - S.t0) / 22) % 560
+      }));
+      const ch = S.lens === "story" && S.chapter != null ? CH[S.chapter] : null;
+      if (ch && ch.base && ch.arcs.length) L_.push(new deck.ArcLayer({
+        id: "arcs-" + S.chapter, data: ch.arcs.map(a => [places[ch.base], places[a]]),
+        getSourcePosition: d => [d[0].lon, d[0].lat], getTargetPosition: d => [d[1].lon, d[1].lat],
+        getSourceColor: [204, 255, 51, 230], getTargetColor: [51, 82, 255, 230], getWidth: 2, widthMinPixels: 1.5, getHeight: .5, greatCircle: false
+      }));
+      // featured beacons
+      const pulse = reduce ? .5 : ((performance.now() - S.t0) % 2400) / 2400;
+      L_.push(new deck.ScatterplotLayer({
+        id: "beacons", data: ["frankfurt", "baku"].map(id => places[id]), getPosition: p => [p.lon, p.lat], stroked: true, filled: false,
+        getRadius: 4 + pulse * 26, radiusUnits: "pixels", getLineColor: [204, 255, 51, Math.round(220 * (1 - pulse))], lineWidthMinPixels: 1.5,
+        updateTriggers: { getRadius: pulse, getLineColor: pulse }, visible: z < 9 && (S.lens === "map" || (S.chapter != null && [2, 6].includes(S.chapter)))
       }));
     }
     if (showItems) {
       L_.push(new deck.ColumnLayer({
-        id: "items", data: items, diskResolution: 12, extruded: true, pickable: true,
+        id: "items", data: items.filter(d => S.lens === "skill" || d.place), diskResolution: 12, extruded: true, pickable: true,
         radius: S.lens === "map" ? Math.max(14, 25000 * k) : 30000,
         getPosition: (d) => pos[d.i], getElevation: elevation,
         getFillColor: d => {
           const c = C.kind[d.kind], sel = S.selected && S.selected.type === "item" && S.selected.item === d, hov = S.hover === d;
           if (S.hidden.has(d.kind)) return [0, 0, 0, 0];
           if (sel) return [...C.lime, 255];
-          return [...c, hov ? 255 : 225];
+          const ph = phase(d); if (ph === 1) return [...c, 70];
+          return [...c, hov ? 255 : 230];
         },
         material: { ambient: .45, diffuse: .6, shininess: 40, specularColor: [80, 90, 140] },
-        updateTriggers: { getPosition: [S.lens, Math.round(z * 8)], getElevation: [S.lens, Math.round(z * 8), [...S.hidden].join(), S.selected && S.selected.item && S.selected.item.i],
-          getFillColor: [S.hover && S.hover.i, S.selected && S.selected.item && S.selected.item.i, [...S.hidden].join()] },
+        updateTriggers: { getPosition: [S.lens, Math.round(z * 8)], getElevation: [S.lens, S.chapter, Math.round(z * 8), [...S.hidden].join(), S.selected && S.selected.item && S.selected.item.i],
+          getFillColor: [S.hover && S.hover.i, S.selected && S.selected.item && S.selected.item.i, [...S.hidden].join(), S.lens, S.chapter] },
         transitions: S.transitionLens ? { getPosition: { duration: 1300, easing: t => 1 - Math.pow(1 - t, 3) }, getElevation: { duration: 900 } } : {}
       }));
     }
     // labels
-    if (S.lens === "map" && z < 12.4) {
-      const pl = scene.places.filter(p => p.lon > -30 && (p.home || p.region || z > 4.6 || p.n >= 3));
+    if (S.lens !== "skill" && z < 12.4) {
+      const curCh = S.lens === "story" && S.chapter != null ? CH[S.chapter] : null;
+      const inCh = p => !curCh || items.some(i => i.place === p.id && phase(i) > 0);
+      const pl = scene.places.filter(p => p.lon > -30 && inCh(p) && (p.home || p.region || z > 4.6 || p.n >= 3 || (curCh && items.some(i => i.place === p.id && i.ch === S.chapter))));
       L_.push(new deck.TextLayer({
         id: "place-labels", data: pl, pickable: true, getPosition: p => [p.lon, p.lat], getText: p => p.name.toUpperCase(),
         getSize: p => p.home ? 13 : 11, getColor: p => p.home ? C.text : [200, 205, 218], getPixelOffset: p => p.id === "qatar" ? [14, 10] : p.id === "saudi" ? [-14, -10] : [14, -10], getTextAnchor: p => p.id === "saudi" ? "end" : "start",
         fontFamily: "Archivo, Helvetica, Arial, sans-serif", fontWeight: 700, characterSet: "auto", outlineWidth: 3, outlineColor: [5, 6, 10, 255],
         fontSettings: { sdf: true, fontSize: 64, buffer: 6 }, parameters: { depthCompare: "always" }, updateTriggers: { getText: I.lang }
       }));
-      L_.push(new deck.TextLayer({
-        id: "else-label", data: [{ p: ELSE }], getPosition: d => [d.p[0], d.p[1] - 2.2], getText: () => T("v2.elsewhere").toUpperCase(),
-        getSize: 11, getColor: C.mute, fontFamily: "JetBrains Mono, monospace", characterSet: "auto", fontSettings: { sdf: true, fontSize: 48, buffer: 6 }, parameters: { depthCompare: "always" },
-        outlineWidth: 3, outlineColor: [5, 6, 10, 255], visible: z < 7, updateTriggers: { getText: I.lang }
-      }));
-    }
-    if (S.lens === "time") {
-      const yrs = []; for (let y = 2014; y <= 2025; y++) yrs.push({ y, p: [-4 + (y - 2014) * 4.1 + .55, 29.2] }); yrs.push({ y: 2026, p: [52.2, 29.2] });
-      L_.push(new deck.TextLayer({ id: "years", data: yrs, getPosition: d => d.p, getText: d => String(d.y), getSize: d => d.y % 2 ? 11 : 15, getColor: d => d.y === 2026 ? C.lime : C.text,
-        fontFamily: "Archivo, sans-serif", fontWeight: 800, fontSettings: { sdf: true, fontSize: 64, buffer: 6 }, parameters: { depthCompare: "always" } }));
-      L_.push(new deck.PathLayer({ id: "axis", data: [{ path: [[-5, 30], [57.5, 30]] }], getPath: d => d.path, getColor: [126, 134, 155, 140], widthMinPixels: 1 }));
     }
     if (S.lens === "skill") {
       const cl = SKILL_ORDER.map((s, i) => { const a = -Math.PI / 2 + i * Math.PI / 3; return { s, p: [26 + Math.cos(a) * 15, 40 + Math.sin(a) * 9.5 - 4.4] }; });
@@ -190,7 +222,7 @@
   }
   let raf = 0; function redraw() { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; deckgl && deckgl.setProps({ layers: layers() }); }); }
   // keep the route comet moving
-  (function tick() { if (!reduce && S.lens === "map" && S.view.zoom < 12) redraw(); setTimeout(() => requestAnimationFrame(tick), 40); })();
+  (function tick() { if (!reduce && S.lens !== "skill" && S.view.zoom < 9) redraw(); setTimeout(() => requestAnimationFrame(tick), 40); })();
 
   /* ---------- camera ---------- */
   function fly(v, ms = 2200) {
@@ -203,11 +235,13 @@
   function nearestPlaza(lon, lat) { if (!S.heat) return null; let best = null, bd = 1e9; for (const f of S.heat.plazas.features) { const [x, y] = f.properties._c; const d = Math.hypot(x - lon, y - lat); if (d < bd) { bd = d; best = f; } } return best; }
   function level(z) { return z < 5 ? "world" : z < 9 ? "region" : z < 13 ? "city" : "square"; }
   function hud() {
+    document.body.classList.toggle("story", S.lens === "story");
     const v = S.view, lv = level(v.zoom);
     document.querySelectorAll("#ladder button").forEach(b => b.classList.toggle("on", b.dataset.level === lv));
     const parts = [T("v2.l.world")];
-    if (S.lens !== "map") parts.push(T("v2.lens." + S.lens));
-    else {
+    if (S.lens === "skill") parts.push(T("v2.lens.skill"));
+    else if (S.lens === "story" && S.chapter != null) parts.push(T("v2.lens.story"), T("v2.c" + S.chapter + ".t"));
+    else if (S.lens === "map") {
       const [p, d] = nearestPlace(v.longitude, v.latitude);
       if (v.zoom >= 5 && p) parts.push(countryName(p.country));
       if (v.zoom >= 9 && p && d < 1.5) parts.push(p.name);
@@ -248,8 +282,8 @@
   /* ---------- panel ---------- */
   function kindTag(k) { return `<span class="mono kind k-${k}"><i></i>${esc(kindName(k))}</span>`; }
   function itemRow(it) { return `<li><button data-item="${it.i}"><i class="k-${it.kind}"></i><span>${esc(it.t)}</span><em>${esc(kindName(it.kind))}</em></button></li>`; }
-  function openPanel(html) { $("#panelBody").innerHTML = html; $("#panel").classList.add("on"); }
-  function closePanel() { $("#panel").classList.remove("on"); S.selected = null; redraw(); }
+  function openPanel(html) { $("#panelBody").innerHTML = html; $("#panel").classList.add("on"); document.body.classList.add("panel-on"); }
+  function closePanel() { $("#panel").classList.remove("on"); document.body.classList.remove("panel-on"); S.selected = null; redraw(); }
   function showItem(it) {
     S.selected = { type: "item", item: it }; redraw();
     const p = it.place ? places[it.place] : null, where = p ? `${p.name} · ${countryName(p.country)}` : T("v2.elsewhere");
@@ -289,12 +323,17 @@
   });
   $("#panelX").onclick = closePanel;
 
+  function thumb(it) {
+    if (it.ref === "uhi") return "img/uhi.jpg";
+    if (it.kind === "folio" && folioById(it.ref)) return `../assets/img/folio/${it.ref}.webp`;
+    return null;
+  }
   /* ---------- hover chip ---------- */
   function chip(info) {
     const c = $("#chip"), o = info.object;
     if (!o || document.body.classList.contains("touring")) { c.classList.remove("on"); return; }
     let h = "";
-    if (info.layer.id === "items") { const p = o.place ? places[o.place] : null; h = `<span class="mono">${esc(kindName(o.kind))}${S.lens === "time" ? " · " + (o.year >= 2026 ? 2026 : o.year) : ""}</span><b>${esc(o.t)}</b>${esc(p ? p.name : T("v2.elsewhere"))}`; }
+    if (info.layer.id === "items") { const p = o.place ? places[o.place] : null, im = thumb(o); h = `${im ? `<img src="${im}" alt="">` : ""}<span class="mono">${esc(kindName(o.kind))}</span><b>${esc(o.t)}</b>${esc(p ? p.name : T("v2.elsewhere"))}`; }
     else if (info.layer.id === "place-labels") h = `<span class="mono">${esc(countryName(o.country))}</span><b>${esc(o.name)}</b>${esc(T("v2.items").replace("{n}", o.n))}`;
     else if (info.layer.id === "plazas") h = `<span class="mono">${esc(T("v2.heat.rank").replace("{r}", o.properties.rank))}</span><b>${esc(o.properties.name)}</b>${o.properties.tmrt_day_mean} °C`;
     else if (info.layer.id === "countries" && o.properties.v) h = `<b>${esc(countryName(o.properties.n))}</b>${esc(T("v2.items").replace("{n}", items.filter(i => i.country === o.properties.n).length))}`;
@@ -305,14 +344,19 @@
   }
 
   /* ---------- lenses & levels ---------- */
-  function setLens(l) {
-    if (S.lens === l) return; S.lens = l; S.transitionLens = true;
+  function setLens(l, keepView) {
+    if (S.lens === l && l !== "story") return;
+    S.lens = l; S.transitionLens = true;
     document.querySelectorAll("#lenses button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lens === l)));
-    redraw(); setTimeout(() => { S.transitionLens = false; }, 1400);
-    fly(l === "map" ? V.world : V[l], 1800); hud();
+    setTimeout(() => { S.transitionLens = false; }, 1400);
+    if (l === "story") { goChapter(S.chapter ?? 0); return; }
+    stopPlay(); S.chapter = null; $("#chap").hidden = true; timeline();
+    if (!keepView) fly(l === "map" ? V.world : V[l], 1800);
+    redraw(); hud();
   }
   function goLevel(lv) {
-    if (S.lens !== "map") { S.lens = "map"; document.querySelectorAll("#lenses button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lens === "map"))); }
+    hideIntro();
+    if (S.lens !== "map") setLens("map", true);
     if (lv === "square" || lv === "city") loadHeat();
     fly(V[lv], lv === "square" ? 3200 : 2400);
   }
@@ -320,19 +364,12 @@
   $("#ladder").addEventListener("click", e => { const b = e.target.closest("[data-level]"); if (b) goLevel(b.dataset.level); });
   $("#hour").addEventListener("input", e => setHour(e.target.value));
 
-  /* ---------- legend / filters ---------- */
-  function legend() {
-    const n = k => items.filter(i => i.kind === k).length;
-    $("#legend").innerHTML = KIND_ORDER.map(k => `<button data-k="${k}" class="k-${k}${S.hidden.has(k) ? " off" : ""}"><i></i>${esc(kindName(k))} ${n(k)}</button>`).join("");
-  }
-  $("#legend").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; const k = b.dataset.k; S.hidden.has(k) ? S.hidden.delete(k) : S.hidden.add(k); S.transitionLens = true; legend(); redraw(); setTimeout(() => S.transitionLens = false, 1000); });
-
   /* ---------- command palette ---------- */
   let cmdSel = 0, cmdResults = [];
   function cmdEntries() {
     const e = [];
-    scene.places.forEach(p => e.push({ t: p.name, sub: countryName(p.country), k: "place", go: () => { if (S.lens !== "map") setLens("map"); fly({ longitude: p.lon, latitude: p.lat, zoom: p.id === "frankfurt" ? 10.6 : 7.2, pitch: 55, bearing: -15 }); showPlace(p); } }));
-    items.forEach(it => e.push({ t: it.t, sub: kindName(it.kind), k: it.kind, go: () => { if (S.lens !== "map") setLens("map"); const p = it.place && places[it.place]; if (p) fly({ longitude: p.lon, latitude: p.lat, zoom: 8.4, pitch: 55, bearing: -15 }); showItem(it); } }));
+    scene.places.forEach(p => e.push({ t: p.name, sub: countryName(p.country), k: "place", go: () => { if (S.lens !== "map") setLens("map", true); fly({ longitude: p.lon, latitude: p.lat, zoom: p.id === "frankfurt" ? 10.6 : 7.2, pitch: 55, bearing: -15 }); showPlace(p); } }));
+    items.forEach(it => e.push({ t: it.t, sub: kindName(it.kind), k: it.kind, go: () => { if (S.lens !== "map") setLens("map", true); const p = it.place && places[it.place]; if (p) fly({ longitude: p.lon, latitude: p.lat, zoom: 8.4, pitch: 55, bearing: -15 }); showItem(it); } }));
     if (S.heat) S.heat.plazas.features.forEach(f => e.push({ t: f.properties.name, sub: "Frankfurt · " + T("v2.l.square"), k: "plaza", go: () => { const [x, y] = f.properties._c; fly({ longitude: x, latitude: y, zoom: 17, pitch: 60, bearing: 20 }); showPlaza(f); } }));
     else e.push({ t: "Frankfurt Altstadt · 1 m", sub: T("v2.heat.title"), k: "plaza", go: () => goLevel("square") });
     return e;
@@ -356,48 +393,77 @@
   $("#cmdList").addEventListener("click", e => { const b = e.target.closest("[data-i]"); if (b) { const r = cmdResults[+b.dataset.i]; cmdClose(); hideIntro(); r.go(); } });
   $("#cmdk").addEventListener("click", e => { if (e.target.id === "cmdk") cmdClose(); });
 
-  /* ---------- tour ---------- */
-  const TOUR = [
-    { v: () => V.world, lens: "map", cap: "v2.t0" },
-    { v: () => ({ longitude: 9.4, latitude: 50.6, zoom: small() ? 5.4 : 6.4, pitch: 58, bearing: -22 }), lens: "map", cap: "v2.t1", place: "frankfurt" },
-    { v: () => ({ longitude: 49.87, latitude: 40.41, zoom: small() ? 5.4 : 6.6, pitch: 60, bearing: 18 }), lens: "map", cap: "v2.t2", place: "baku" },
-    { v: () => ({ longitude: 52.5, latitude: 24.3, zoom: small() ? 4 : 4.9, pitch: 55, bearing: 8 }), lens: "map", cap: "v2.t3" },
-    { v: () => ({ longitude: 27.6, latitude: 38.4, zoom: small() ? 5.6 : 6.7, pitch: 58, bearing: -10 }), lens: "map", cap: "v2.t4", place: "izmir" },
-    { v: () => V.time, lens: "time", cap: "v2.t5" },
-    { v: () => V.square, lens: "map", cap: "v2.t6", heat: 15 }
-  ];
-  let tourI = -1, tourTimer = 0, tourStart = 0; const STOP_MS = 6500;
-  function tourGo(i) {
-    tourI = i; clearTimeout(tourTimer);
-    if (i >= TOUR.length) return tourEnd(true);
-    const st = TOUR[i];
-    closePanel();
-    if (S.lens !== st.lens) { S.lens = st.lens; S.transitionLens = true; document.querySelectorAll("#lenses button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lens === st.lens))); setTimeout(() => S.transitionLens = false, 1400); }
-    if (st.heat) { loadHeat(); setHour(st.heat); }
-    fly(st.v(), i === 0 ? 1800 : st.heat ? 3600 : 2800);
-    $("#tourStep").textContent = `${String(i + 1).padStart(2, "0")} / ${String(TOUR.length).padStart(2, "0")}`;
-    $("#tourText").textContent = T(st.cap);
-    tourStart = performance.now();
-    tourTimer = setTimeout(() => tourGo(i + 1), STOP_MS + (st.heat ? 1500 : 0));
-    redraw();
+  /* ---------- story: chapters, timeline, autoplay ---------- */
+  const fmtY = y => Math.floor(y);
+  function chapItems(c) { return items.filter(i => i.ch === c); }
+  function timeline() {
+    const span = 2026.95 - 2014;
+    $("#timeline").innerHTML = CH.map((ch, c) => {
+      const w = ch.y ? (ch.y[1] - ch.y[0]) / span * 86 : 14;
+      const cls = [S.chapter === c ? "on" : "", S.chapter != null && c < S.chapter && ch.y ? "past" : "", ch.y ? "" : "alt"].join(" ");
+      const yr = ch.y ? `${fmtY(ch.y[0])}${fmtY(ch.y[1]) !== fmtY(ch.y[0]) ? "–" + String(Math.min(2026, fmtY(ch.y[1]))).slice(2) : ""}` : T("v2.c7.y");
+      return `<button data-c="${c}" class="${cls}" style="flex:${w}" title="${esc(T("v2.c" + c + ".t"))}"><span>${yr}</span><b>${esc(T("v2.c" + c + ".t"))}</b>${S.chapter === c && S.playing ? '<i class="prog" id="prog"></i>' : ""}</button>`;
+    }).join("");
   }
-  (function bar() { if (tourI >= 0) { const st = TOUR[tourI]; const d = STOP_MS + (st && st.heat ? 1500 : 0); $("#tourBar").style.width = Math.min(100, (performance.now() - tourStart) / d * 100) + "%"; } requestAnimationFrame(bar); })();
-  function tourStart_() { hideIntro(); document.body.classList.add("touring"); $("#tourCap").hidden = false; $("#endCard").hidden = true; tourGo(0); }
-  function tourEnd(showEnd) {
-    clearTimeout(tourTimer); tourI = -1; document.body.classList.remove("touring"); $("#tourCap").hidden = true;
-    if (showEnd) { $("#endCard").hidden = false; $("#endPdf").href = `../assets/cv/Baris-Parlatangiller-CV-GIS-${I.lang.toUpperCase()}.pdf`; }
+  function chapterCard(c) {
+    const ch = CH[c], its = chapItems(c);
+    const yr = ch.y ? `${fmtY(ch.y[0])}<small>→</small>${ch.y[1] > 2026 ? T("it.present") : fmtY(ch.y[1])}` : esc(T("v2.c7.y"));
+    const imgs = its.filter(thumb);
+    const counts = KIND_ORDER.map(k => [k, its.filter(i => i.kind === k).length]).filter(x => x[1]);
+    const where = [...new Set(its.filter(i => i.place).map(i => places[i.place].name))].slice(0, 5).join(" · ");
+    $("#chap").innerHTML = `<div class="yr">${yr}</div>
+      <p class="meta mono"><span>${esc(T("v2.chapter"))} ${String(c + 1).padStart(2, "0")} / ${String(CH.length).padStart(2, "0")}</span><span>${esc(where)}</span></p>
+      <h2>${esc(T("v2.c" + c + ".t"))}</h2><p>${esc(T("v2.c" + c + ".p"))}</p>
+      ${imgs.length ? `<div class="strip">${imgs.map(i => `<button data-item="${i.i}"><img src="${thumb(i)}" alt="" loading="lazy"><span>${esc(i.t)}</span></button>`).join("")}</div>` : ""}
+      <div class="nav"><button class="b b-line" id="chPrev" ${c === 0 ? "disabled" : ""}>← ${esc(T("v2.prev"))}</button><button class="b b-paper" id="chNext">${esc(c === CH.length - 1 ? T("v2.l.square") + " ↘" : T("v2.next") + " →")}</button></div>
+      <div class="key mono">${counts.map(([k, n]) => `<span class="k-${k}"><i></i>${n} ${esc(kindName(k))}</span>`).join("")}</div>`;
+    $("#chap").hidden = false; $("#chap").style.animation = "none"; void $("#chap").offsetWidth; $("#chap").style.animation = "";
   }
-  $("#tourBtn").onclick = tourStart_; $("#introTour").onclick = tourStart_;
-  $("#tourNext").onclick = () => tourGo(tourI + 1);
-  $("#tourSkip").onclick = () => tourEnd(false);
+  function goChapter(c) {
+    hideIntro(); $("#endCard").hidden = true;
+    if (c >= CH.length) return finale();
+    if (S.lens !== "story") { S.lens = "story"; document.querySelectorAll("#lenses button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lens === "story"))); }
+    S.chapter = Math.max(0, c); S.transitionLens = true; setTimeout(() => S.transitionLens = false, 1300);
+    S.routeTarget = ROUTE_ARRIVE.filter(a => a <= S.chapter).length * 100 + (S.chapter === 7 ? 0 : 0);
+    if (S.chapter === 7) S.routeTarget = 500;
+    closePanel(true); fly(CH[S.chapter].v, 2600); chapterCard(S.chapter); timeline(); redraw(); hud();
+    if (S.playing) schedule();
+  }
+  function finale() {
+    stopPlay(); $("#chap").hidden = true; setLens("map", true); goLevel("square"); setHour(15);
+    $("#chap").innerHTML = `<div class="yr">1 m</div><p class="meta mono"><span>Frankfurt · Altstadt</span><span>27.06.2026 · 15:00</span></p><h2>${esc(T("v2.f1.t"))}</h2><p>${esc(T("v2.fin"))}</p><div class="nav"><button class="b b-paper" id="chEnd">${esc(T("v2.cv"))} / PDF</button></div>`;
+    setTimeout(() => { $("#chap").hidden = false; }, 1200);
+  }
+  let playTimer = 0, playStart = 0; const STOP = 5600;
+  function schedule() { clearTimeout(playTimer); playStart = performance.now(); playTimer = setTimeout(() => goChapter(S.chapter + 1), STOP); }
+  function startPlay() { S.playing = true; $("#playBtn").classList.add("on"); goChapter(S.chapter == null || S.lens !== "story" || S.chapter >= CH.length - 1 ? 0 : S.chapter); }
+  function stopPlay() { S.playing = false; clearTimeout(playTimer); $("#playBtn").classList.remove("on"); const pr = $("#prog"); if (pr) pr.remove(); }
+  (function prog() { const pr = $("#prog"); if (pr && S.playing) pr.style.width = Math.min(100, (performance.now() - playStart) / STOP * 100) + "%"; requestAnimationFrame(prog); })();
+  // ease the route drawing toward the chapter
+  (function routeAnim() { if (Math.abs(S.routeT - S.routeTarget) > .5) { S.routeT += (S.routeTarget - S.routeT) * .05; redraw(); } setTimeout(() => requestAnimationFrame(routeAnim), 30); })();
+  $("#timeline").addEventListener("click", e => { const b = e.target.closest("[data-c]"); if (b) { stopPlay(); goChapter(+b.dataset.c); } });
+  $("#playBtn").onclick = () => S.playing ? stopPlay() : startPlay();
+  $("#chap").addEventListener("click", e => {
+    if (e.target.closest("#chPrev")) { stopPlay(); goChapter(S.chapter - 1); }
+    else if (e.target.closest("#chNext")) { stopPlay(); goChapter(S.chapter + 1); }
+    else if (e.target.closest("#chEnd")) { $("#chap").hidden = true; $("#endCard").hidden = false; $("#endPdf").href = `../assets/cv/Baris-Parlatangiller-CV-GIS-${I.lang.toUpperCase()}.pdf`; }
+    else { const b = e.target.closest("[data-item]"); if (b) { const it = items[+b.dataset.item]; if (it.kind === "folio" && folioById(it.ref)) { BoardViewer.open(A.folio, A.folio.findIndex(f => f.id === it.ref), 1); } else showItem(it); } }
+  });
   $("#endExplore").onclick = () => { $("#endCard").hidden = true; };
+
+  /* ---------- featured work ---------- */
+  function featured() {
+    const card = f => `<button class="feat" data-feat="${f.id}"><div class="img"><img src="${f.img}" alt="" loading="lazy"><span class="badge">${esc(f.badge)}</span></div><div class="body"><h3>${esc(T(f.t))}</h3><p>${esc(T(f.s))}</p><span class="go">${esc(T(f.act))} →</span></div></button>`;
+    $("#introFeats").innerHTML = FEATURED.map(card).join(""); $("#dockFeats").innerHTML = FEATURED.map(card).join("");
+  }
+  document.addEventListener("click", e => { const b = e.target.closest("[data-feat]"); if (!b) return; const f = FEATURED.find(x => x.id === b.dataset.feat); hideIntro(); stopPlay(); f.go(); });
 
   /* ---------- intro ---------- */
   function hideIntro() { const el = $("#intro"); if (el.classList.contains("gone")) return; el.classList.add("gone"); document.body.classList.remove("intro-on"); }
   $("#introEnter").onclick = () => { hideIntro(); };
+  $("#introStory").onclick = () => startPlay();
   function introText() {
     const t = window.PLACES.totals;
-    $("#introText").textContent = T("v2.intro").replace("{n}", items.length).replace("{c}", t.countries);
     $("#introStats").innerHTML = [[t.countries, T("pl.countries")], [t.places, T("pl.places")], [items.length, T("pl.entries")], [fmt(t.route_km), T("pl.route")]].map(([v, k]) => `<div><dt>${v}</dt><dd>${esc(k)}</dd></div>`).join("");
   }
 
@@ -406,8 +472,10 @@
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); $("#cmdk").hidden ? cmdOpen() : cmdClose(); return; }
     if (e.target.matches("input")) { if (e.key === "Escape") cmdClose(); return; }
     if (document.querySelector("#viewer[open]")) return;
-    if (e.key === "Escape") { if (!$("#cmdk").hidden) cmdClose(); else if (tourI >= 0) tourEnd(false); else closePanel(); }
-    if (e.key === "1") setLens("map"); if (e.key === "2") setLens("time"); if (e.key === "3") setLens("skill");
+    if (e.key === "Escape") { if (!$("#cmdk").hidden) cmdClose(); else if (S.playing) stopPlay(); else closePanel(); }
+    if (e.key === "1") setLens("story"); if (e.key === "2") setLens("map"); if (e.key === "3") setLens("skill");
+    if (S.lens === "story" && S.chapter != null) { if (e.key === "ArrowRight") { stopPlay(); goChapter(S.chapter + 1); } if (e.key === "ArrowLeft") { stopPlay(); goChapter(S.chapter - 1); } }
+    if (e.key === " " && document.body.classList.contains("intro-on") === false) { e.preventDefault(); S.playing ? stopPlay() : startPlay(); }
     if (e.key === "Enter" && !$("#intro").classList.contains("gone")) hideIntro();
   });
 
@@ -419,7 +487,8 @@
     document.body.classList.add("intro-on");
     [scene, world] = await Promise.all([fetch("data/scene.json").then(r => r.json()), fetch("data/world.json").then(r => r.json())]);
     items = scene.items; scene.places.forEach(p => places[p.id] = p);
-    buildDots(); buildRoute(); introText(); legend();
+    items.forEach(it => { it.ch = CH.findIndex(c => c.refs.includes(it.ref) || (c.refs.includes(MAPS) && it.kind === "map")); if (it.ch < 0) it.ch = 7; });
+    buildDots(); buildRoute(); introText(); featured(); timeline();
     try { await document.fonts.load("800 64px Archivo"); await document.fonts.load("400 48px 'JetBrains Mono'"); } catch (e) { }
     deckgl = new deck.Deck({
       parent: $("#map"), views: new deck.MapView({ repeat: false, farZMultiplier: 3 }), initialViewState: S.view,
@@ -445,8 +514,8 @@
     redraw(); hud();
     const autoTour = new URLSearchParams(location.search).get("tour") === "1";
     setTimeout(() => { fly(V.world, reduce ? 0 : 4200); }, 400);
-    if (autoTour) setTimeout(tourStart_, 1200);
-    I.onChange(() => { introText(); legend(); hud(); redraw(); if (tourI >= 0) $("#tourText").textContent = T(TOUR[tourI].cap); if (S.selected) { const s = S.selected; s.type === "item" ? showItem(s.item) : s.type === "place" ? showPlace(s.place) : showPlaza(s.f); } });
+    if (autoTour) setTimeout(startPlay, 1200);
+    I.onChange(() => { introText(); featured(); timeline(); if (S.chapter != null && !$("#chap").hidden) chapterCard(S.chapter); hud(); redraw(); if (S.selected) { const s = S.selected; s.type === "item" ? showItem(s.item) : s.type === "place" ? showPlace(s.place) : showPlaza(s.f); } });
   }
   boot();
 })();

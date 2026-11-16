@@ -21,15 +21,21 @@
 
   <!-- intro -->
   <section class="intro" id="intro">
-    <p class="mono k">Career Twin · Nº 02/2026</p>
-    <h1><span>Baris</span><span>Parlatangiller</span></h1>
-    <p class="intro-role" data-i18n="v2.role"></p>
-    <p class="intro-text" id="introText"></p>
-    <div class="intro-ctas">
-      <button class="b b-klein" id="introTour"><i class="play"></i><span data-i18n="v2.tour"></span></button>
-      <button class="b b-line" id="introEnter" data-i18n="v2.enter"></button>
+    <div class="intro-l">
+      <p class="mono k">Career Twin · Nº 02/2026</p>
+      <h1><span>Baris</span><span>Parlatangiller</span></h1>
+      <p class="intro-role" data-i18n="v2.role"></p>
+      <p class="intro-text" data-i18n="v2.lede"></p>
+      <div class="intro-ctas">
+        <button class="b b-klein" id="introStory"><i class="play"></i><span data-i18n="v2.story"></span></button>
+        <button class="b b-line" id="introEnter" data-i18n="v2.explore"></button>
+      </div>
+      <dl class="intro-stats" id="introStats"></dl>
     </div>
-    <dl class="intro-stats" id="introStats"></dl>
+    <div class="intro-r">
+      <p class="mono k" data-i18n="v2.feat"></p>
+      <div class="feats" id="introFeats"></div>
+    </div>
     <p class="mono intro-hint" data-i18n="v2.hint"></p>
   </section>
 
@@ -48,8 +54,8 @@
   <aside class="hud-left">
     <p class="mono lbl" data-i18n="v2.lens"></p>
     <div class="lenses" id="lenses">
-      <button data-lens="map" aria-pressed="true"><kbd>1</kbd><span data-i18n="v2.lens.map"></span></button>
-      <button data-lens="time"><kbd>2</kbd><span data-i18n="v2.lens.time"></span></button>
+      <button data-lens="story"><kbd>1</kbd><span data-i18n="v2.lens.story"></span></button>
+      <button data-lens="map" aria-pressed="true"><kbd>2</kbd><span data-i18n="v2.lens.map"></span></button>
       <button data-lens="skill"><kbd>3</kbd><span data-i18n="v2.lens.skill"></span></button>
     </div>
     <p class="mono lbl" data-i18n="v2.scale"></p>
@@ -61,9 +67,15 @@
     </ol>
   </aside>
 
+  <!-- featured dock -->
+  <aside class="dock" id="dock"><p class="mono" data-i18n="v2.feat"></p><div id="dockFeats"></div></aside>
+
+  <!-- chapter card -->
+  <article class="chap" id="chap" hidden></article>
+
   <footer class="hud-bottom">
-    <div class="legend" id="legend"></div>
-    <button class="b b-klein tourbtn" id="tourBtn"><i class="play"></i><span data-i18n="v2.tour"></span></button>
+    <button class="playbtn" id="playBtn" aria-label="Play"><i class="play"></i></button>
+    <div class="timeline" id="timeline"></div>
     <div class="readout mono"><span id="coords">50.1109° N · 8.6821° E</span><span id="ratio">1 : 25 000 000</span></div>
   </footer>
 
@@ -83,13 +95,6 @@
   <!-- hover chip -->
   <div class="chip" id="chip" role="status"></div>
 
-  <!-- tour caption -->
-  <div class="tourcap" id="tourCap" hidden>
-    <div class="tourbar"><i id="tourBar"></i></div>
-    <p class="mono" id="tourStep"></p>
-    <p class="tourtext" id="tourText"></p>
-    <div class="tourctl"><button class="b b-paper" id="tourNext" data-i18n="v2.tour.next"></button><button class="b b-line" id="tourSkip" data-i18n="v2.tour.skip"></button></div>
-  </div>
   <div class="endcard" id="endCard" hidden>
     <h2 data-i18n="v2.end.title"></h2>
     <p data-i18n="v2.end.text"></p>
