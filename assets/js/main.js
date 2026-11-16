@@ -10,7 +10,7 @@
 
   /* ---------------- hero ---------------- */
   function renderStats() {
-    const items = [["7", "stat.countries2"], ["400k", "stat.ha2"], [A.repos.length, "stat.repos2"], [A.folio.length, "fo.kicker"]];
+    const items = [[window.PLACES ? PLACES.totals.countries : 10, "stat.countries2"], ["400k", "stat.ha2"], [A.repos.length, "stat.repos2"], [A.folio.length, "fo.kicker"]];
     $("#stats").innerHTML = items.map(([v, k]) => `<div><dt>${v}</dt><dd>${esc(k === "fo.kicker" ? "Folio 2026" : T(k))}</dd></div>`).join("");
   }
   function renderSun(sun) {
