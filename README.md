@@ -10,9 +10,9 @@ English · Deutsch · Türkçe
 
 ## v2: Career Twin (3D)
 
-**Live:** https://barisparlatangiller.github.io/Baris-Parlatangiller-CV-Portfolio/v2/ · tour link: `…/v2/?tour=1`
+**Live:** https://barisparlatangiller.github.io/Baris-Parlatangiller-CV-Portfolio/v2/ · career timeline link: `…/v2/?tour=1`
 
-The whole career as one 3D map you fly through (deck.gl). Every role, project, map and award is a column; scroll zooms from the world down to one metre. The deepest level is the real SOLWEIG study of Frankfurt's Altstadt: 3,018 extruded buildings, 1,827 street trees, 24 squares with statistics and hourly mean radiant temperature for 27 June 2026, with an hour slider. Three lenses (keys 1, 2, 3) rearrange the same items by place, time and skill. A 30 second autopilot tour, a command palette (Cmd+K), a detail panel for everything, and the board viewer with guided tours. Data is built in Python by `tools/build_v2.py` (GeoPandas, Shapely, Pillow).
+The whole career as one 3D map you fly through (deck.gl). Every role, project, map and award is a column; scroll zooms from the world down to one metre. The deepest level is the real SOLWEIG study of Frankfurt's Altstadt: 3,018 extruded buildings, 1,827 street trees, 24 squares with statistics and hourly mean radiant temperature for 27 June 2026, with an hour slider. Three lenses (keys 1, 2, 3) rearrange the same items by place, time and skill. A professional career timeline in eight chapters, a rotating globe that hands over to a flat 3D map at city scale, featured work, a command palette (Cmd+K), a detail panel for everything, and the board viewer with guided tours. Data is built in Python by `tools/build_v2.py` (GeoPandas, Shapely, Pillow).
 
 ## The idea
 

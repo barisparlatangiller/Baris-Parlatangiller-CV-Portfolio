@@ -31,8 +31,8 @@ OUT = ROOT / "v2" / "data"
 NE = ROOT / "tools" / "data" / "countries-50m.json"
 PLACES = ROOT / "tools" / "places.json"
 
-WINDOW = (-100.0, -10.0, 110.0, 80.0)        # lon0, lat0, lon1, lat1 (New York to the Gulf)
-SIMPLIFY = 0.03                          # degrees
+WINDOW = (-180.0, -85.0, 180.0, 85.0)       # whole world, for the globe
+SIMPLIFY = 0.04                          # degrees
 
 # Year and main skill for every item. Work years come from the CV; folio boards, maps and
 # awards without a firm date sit in the 2026 portfolio column.

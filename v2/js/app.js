@@ -24,13 +24,17 @@
 
   /* ---------- camera presets ---------- */
   const FLY = () => new deck.FlyToInterpolator({ speed: 1.4 });
+  const LIN = () => new deck.LinearInterpolator({ transitionProps: ["longitude", "latitude", "zoom"] });
+  const GLOBE_MAX = 8.2;                           // above this zoom the globe hands over to the flat 3D map
+  let mode = "globe";
+  const VIEWS = { globe: new deck._GlobeView({ resolution: 6 }), flat: new deck.MapView({ repeat: false, farZMultiplier: 3 }) };
   const V = {
-    world: { longitude: 24, latitude: 37.5, zoom: small() ? 2.6 : 3.55, pitch: 50, bearing: -12 },
-    region: { longitude: 10.2, latitude: 50.2, zoom: small() ? 5.2 : 6.1, pitch: 55, bearing: -18 },
+    world: { longitude: 26, latitude: 34, zoom: small() ? 1 : 1.85, pitch: 0, bearing: 0 },
+    region: { longitude: 10.2, latitude: 50.2, zoom: small() ? 4.4 : 5.2, pitch: 0, bearing: 0 },
     city: { longitude: 8.6835, latitude: 50.1115, zoom: small() ? 12 : 12.7, pitch: 58, bearing: -24 },
     square: { longitude: 8.6818, latitude: 50.1106, zoom: small() ? 15 : 15.7, pitch: 62, bearing: 28 },
     time: { longitude: 28.5, latitude: 37, zoom: small() ? 2.9 : 3.8, pitch: 56, bearing: 0 },
-    skill: { longitude: 26, latitude: 40, zoom: small() ? 3 : 3.9, pitch: 42, bearing: 0 }
+    skill: { longitude: 26, latitude: 40, zoom: small() ? 2.6 : 3.4, pitch: 0, bearing: 0 }
   };
 
   /* ---------- story: the career as chapters on the map ---------- */
@@ -52,7 +56,7 @@
   ];
 
   /* ---------- state ---------- */
-  const S = { lens: "map", chapter: null, routeT: 500, routeTarget: 500, playing: false, view: { longitude: 28, latitude: 36, zoom: 2.3, pitch: 20, bearing: 0 }, hover: null, selected: null,
+  const S = { lens: "map", chapter: null, routeT: 500, routeTarget: 500, playing: false, view: { longitude: -20, latitude: 22, zoom: small() ? .9 : 1.75, pitch: 0, bearing: 0 }, hover: null, selected: null,
     hidden: new Set(), hour: 15, heat: null, heatImg: {}, loadingHeat: false, transitionLens: false, t0: performance.now() };
   let scene, world, items = [], places = {}, deckgl;
 
@@ -100,6 +104,7 @@
   }
 
   /* ---------- layers ---------- */
+  const GRAT = (() => { const g = []; for (let lon = -180; lon < 180; lon += 15) { const p = []; for (let lat = -80; lat <= 80; lat += 4) p.push([lon, lat]); g.push(p); } for (let lat = -75; lat <= 75; lat += 15) { const p = []; for (let lon = -180; lon <= 180; lon += 4) p.push([lon, lat]); g.push(p); } return g; })();
   let dotData = [];
   function buildDots() {
     const P = window.PLACES, W = P.window;
@@ -127,6 +132,10 @@
     const z = S.view.zoom, k = scaleK(z), pos = positions(), inHeat = S.heat && z > 10.2;
     const showItems = z < 13.4;
     const L_ = [];
+    if (mode === "globe") {
+      L_.push(new deck.SolidPolygonLayer({ id: "sea", data: [[[-180, 90], [0, 90], [180, 90], [180, -90], [0, -90], [-180, -90]]], getPolygon: d => d, getFillColor: [9, 11, 17], stroked: false }));
+      L_.push(new deck.PathLayer({ id: "graticule", data: GRAT, getPath: d => d, getColor: [51, 82, 255, 38], widthMinPixels: 1 }));
+    }
     L_.push(new deck.GeoJsonLayer({
       id: "countries", data: world, filled: true, stroked: true, pickable: true, autoHighlight: true, highlightColor: [51, 82, 255, 70],
       getFillColor: f => f.properties.v ? C.ground2 : C.ground, getLineColor: f => f.properties.v ? [64, 74, 98] : C.edge, lineWidthMinPixels: 1,
@@ -150,7 +159,7 @@
       if (ch && ch.base && ch.arcs.length) L_.push(new deck.ArcLayer({
         id: "arcs-" + S.chapter, data: ch.arcs.map(a => [places[ch.base], places[a]]),
         getSourcePosition: d => [d[0].lon, d[0].lat], getTargetPosition: d => [d[1].lon, d[1].lat],
-        getSourceColor: [204, 255, 51, 230], getTargetColor: [51, 82, 255, 230], getWidth: 2, widthMinPixels: 1.5, getHeight: .5, greatCircle: false
+        getSourceColor: [204, 255, 51, 230], getTargetColor: [51, 82, 255, 230], getWidth: 2, widthMinPixels: 1.5, getHeight: .5, greatCircle: true
       }));
       // featured beacons
       const pulse = reduce ? .5 : ((performance.now() - S.t0) % 2400) / 2400;
@@ -225,10 +234,24 @@
   (function tick() { if (!reduce && S.lens !== "skill" && S.view.zoom < 9) redraw(); setTimeout(() => requestAnimationFrame(tick), 40); })();
 
   /* ---------- camera ---------- */
-  function fly(v, ms = 2200) {
-    const target = { ...v, transitionDuration: reduce ? 0 : ms, transitionInterpolator: FLY() };
-    deckgl.setProps({ initialViewState: target });
+  function setMode(m, vs) {
+    if (mode === m) return; mode = m;
+    S.view = { pitch: 0, bearing: 0, ...vs };
+    deckgl.setProps({ views: VIEWS[m], initialViewState: { ...S.view } });
+    redraw(); hud();
   }
+  function fly(v, ms = 2200) {
+    const flat = v.zoom > GLOBE_MAX;
+    const go = () => deckgl.setProps({ initialViewState: { ...v, ...(mode === "globe" ? { pitch: 0, bearing: 0 } : {}), transitionDuration: reduce ? 0 : ms, transitionInterpolator: mode === "globe" ? LIN() : FLY() } });
+    if (flat && mode === "globe") {
+      deckgl.setProps({ initialViewState: { longitude: v.longitude, latitude: v.latitude, zoom: GLOBE_MAX - .3, pitch: 0, bearing: 0, transitionDuration: reduce ? 0 : 1400, transitionInterpolator: LIN() } });
+      setTimeout(() => { setMode("flat", { longitude: v.longitude, latitude: v.latitude, zoom: GLOBE_MAX - .3 }); requestAnimationFrame(go); }, reduce ? 0 : 1450);
+    } else if (!flat && mode === "flat") {
+      setMode("globe", { longitude: S.view.longitude, latitude: S.view.latitude, zoom: Math.min(S.view.zoom, GLOBE_MAX - .4) });
+      requestAnimationFrame(go);
+    } else go();
+  }
+
 
   /* ---------- HUD: breadcrumb, ladder, readout ---------- */
   function nearestPlace(lon, lat) { let best = null, bd = 1e9; for (const p of scene.places) { const d = Math.hypot((p.lon - lon) * Math.cos(lat * Math.PI / 180), p.lat - lat); if (d < bd) { bd = d; best = p; } } return [best, bd]; }
@@ -431,18 +454,18 @@
   }
   function finale() {
     stopPlay(); $("#chap").hidden = true; setLens("map", true); goLevel("square"); setHour(15);
-    $("#chap").innerHTML = `<div class="yr">1 m</div><p class="meta mono"><span>Frankfurt · Altstadt</span><span>27.06.2026 · 15:00</span></p><h2>${esc(T("v2.f1.t"))}</h2><p>${esc(T("v2.fin"))}</p><div class="nav"><button class="b b-paper" id="chEnd">${esc(T("v2.cv"))} / PDF</button></div>`;
+    $("#chap").innerHTML = `<div class="yr">1 m</div><p class="meta mono"><span>Frankfurt · Altstadt</span><span>27.06.2026 · 15:00</span></p><h2>${esc(T("v2.f1.t"))}</h2><p>${esc(T("v2.fin"))}</p><div class="nav"><button class="b b-paper" id="chEnd">${esc(T("v2.cv"))}</button></div>`;
     setTimeout(() => { $("#chap").hidden = false; }, 1200);
   }
   let playTimer = 0, playStart = 0; const STOP = 5600;
   function schedule() { clearTimeout(playTimer); playStart = performance.now(); playTimer = setTimeout(() => goChapter(S.chapter + 1), STOP); }
-  function startPlay() { S.playing = true; $("#playBtn").classList.add("on"); goChapter(S.chapter == null || S.lens !== "story" || S.chapter >= CH.length - 1 ? 0 : S.chapter); }
-  function stopPlay() { S.playing = false; clearTimeout(playTimer); $("#playBtn").classList.remove("on"); const pr = $("#prog"); if (pr) pr.remove(); }
+  function startPlay() { S.playing = false; goChapter(S.chapter == null || S.lens !== "story" || S.chapter >= CH.length - 1 ? 0 : S.chapter); }
+  function stopPlay() { S.playing = false; clearTimeout(playTimer); const pr = $("#prog"); if (pr) pr.remove(); }
   (function prog() { const pr = $("#prog"); if (pr && S.playing) pr.style.width = Math.min(100, (performance.now() - playStart) / STOP * 100) + "%"; requestAnimationFrame(prog); })();
   // ease the route drawing toward the chapter
   (function routeAnim() { if (Math.abs(S.routeT - S.routeTarget) > .5) { S.routeT += (S.routeTarget - S.routeT) * .05; redraw(); } setTimeout(() => requestAnimationFrame(routeAnim), 30); })();
   $("#timeline").addEventListener("click", e => { const b = e.target.closest("[data-c]"); if (b) { stopPlay(); goChapter(+b.dataset.c); } });
-  $("#playBtn").onclick = () => S.playing ? stopPlay() : startPlay();
+  
   $("#chap").addEventListener("click", e => {
     if (e.target.closest("#chPrev")) { stopPlay(); goChapter(S.chapter - 1); }
     else if (e.target.closest("#chNext")) { stopPlay(); goChapter(S.chapter + 1); }
@@ -453,15 +476,17 @@
 
   /* ---------- featured work ---------- */
   function featured() {
-    const card = f => `<button class="feat" data-feat="${f.id}"><div class="img"><img src="${f.img}" alt="" loading="lazy"><span class="badge">${esc(f.badge)}</span></div><div class="body"><h3>${esc(T(f.t))}</h3><p>${esc(T(f.s))}</p><span class="go">${esc(T(f.act))} →</span></div></button>`;
+    const card = f => `<button class="feat" data-feat="${f.id}"><div class="img"><img src="${f.img}" alt=""><span class="badge">${esc(f.badge)}</span></div><div class="body"><h3>${esc(T(f.t))}</h3><p>${esc(T(f.s))}</p><span class="go">${esc(T(f.act))} →</span></div></button>`;
     $("#introFeats").innerHTML = FEATURED.map(card).join(""); $("#dockFeats").innerHTML = FEATURED.map(card).join("");
   }
   document.addEventListener("click", e => { const b = e.target.closest("[data-feat]"); if (!b) return; const f = FEATURED.find(x => x.id === b.dataset.feat); hideIntro(); stopPlay(); f.go(); });
 
   /* ---------- intro ---------- */
   function hideIntro() { const el = $("#intro"); if (el.classList.contains("gone")) return; el.classList.add("gone"); document.body.classList.remove("intro-on"); }
-  $("#introEnter").onclick = () => { hideIntro(); };
+  $("#introEnter").onclick = () => { hideIntro(); fly(V.world, 2400); };
   $("#introStory").onclick = () => startPlay();
+  const pdfHref = () => `../assets/cv/Baris-Parlatangiller-CV-GIS-${I.lang.toUpperCase()}.pdf`;
+  $("#introPdf").href = pdfHref(); I.onChange(() => { $("#introPdf").href = pdfHref(); });
   function introText() {
     const t = window.PLACES.totals;
     $("#introStats").innerHTML = [[t.countries, T("pl.countries")], [t.places, T("pl.places")], [items.length, T("pl.entries")], [fmt(t.route_km), T("pl.route")]].map(([v, k]) => `<div><dt>${v}</dt><dd>${esc(k)}</dd></div>`).join("");
@@ -475,7 +500,7 @@
     if (e.key === "Escape") { if (!$("#cmdk").hidden) cmdClose(); else if (S.playing) stopPlay(); else closePanel(); }
     if (e.key === "1") setLens("story"); if (e.key === "2") setLens("map"); if (e.key === "3") setLens("skill");
     if (S.lens === "story" && S.chapter != null) { if (e.key === "ArrowRight") { stopPlay(); goChapter(S.chapter + 1); } if (e.key === "ArrowLeft") { stopPlay(); goChapter(S.chapter - 1); } }
-    if (e.key === " " && document.body.classList.contains("intro-on") === false) { e.preventDefault(); S.playing ? stopPlay() : startPlay(); }
+
     if (e.key === "Enter" && !$("#intro").classList.contains("gone")) hideIntro();
   });
 
@@ -491,11 +516,15 @@
     buildDots(); buildRoute(); introText(); featured(); timeline();
     try { await document.fonts.load("800 64px Archivo"); await document.fonts.load("400 48px 'JetBrains Mono'"); } catch (e) { }
     deckgl = new deck.Deck({
-      parent: $("#map"), views: new deck.MapView({ repeat: false, farZMultiplier: 3 }), initialViewState: S.view,
-      controller: { dragRotate: true, touchRotate: true, inertia: 300, scrollZoom: { speed: .012, smooth: true } },
+      parent: $("#map"), views: VIEWS.globe, initialViewState: S.view,
+      controller: { dragRotate: true, touchRotate: true, inertia: 300, scrollZoom: { speed: .01, smooth: true } },
       layers: [], getCursor: ({ isHovering, isDragging }) => isDragging ? "grabbing" : isHovering ? "pointer" : "grab",
       onViewStateChange: ({ viewState }) => {
         const before = S.view.zoom; S.view = viewState; hud();
+        if (!viewState.transitionDuration) {
+          if (mode === "globe" && viewState.zoom > GLOBE_MAX + .2) setTimeout(() => setMode("flat", { longitude: viewState.longitude, latitude: viewState.latitude, zoom: viewState.zoom, pitch: 40 }), 0);
+          else if (mode === "flat" && viewState.zoom < GLOBE_MAX - .8) setTimeout(() => setMode("globe", { longitude: viewState.longitude, latitude: viewState.latitude, zoom: viewState.zoom }), 0);
+        }
         if (viewState.zoom > 11 && !S.heat && Math.abs(viewState.longitude - 8.68) < .4 && Math.abs(viewState.latitude - 50.11) < .3) loadHeat();
         if (Math.abs(before - viewState.zoom) > .01 || S.lens !== "map") redraw();
       },
@@ -512,8 +541,15 @@
       onError: e => console.warn(e)
     });
     redraw(); hud();
+    let lastSpin = 0;
+    (function spin(t) {
+      if (document.body.classList.contains("intro-on") && mode === "globe" && !reduce && t - lastSpin > 33) {
+        lastSpin = t; S.view = { ...S.view, longitude: S.view.longitude + .1 }; deckgl.setProps({ initialViewState: { ...S.view } });
+      }
+      if (document.body.classList.contains("intro-on")) requestAnimationFrame(spin);
+    })(0);
     const autoTour = new URLSearchParams(location.search).get("tour") === "1";
-    setTimeout(() => { fly(V.world, reduce ? 0 : 4200); }, 400);
+    // the globe turns slowly behind the intro; it settles on the work when the visitor enters
     if (autoTour) setTimeout(startPlay, 1200);
     I.onChange(() => { introText(); featured(); timeline(); if (S.chapter != null && !$("#chap").hidden) chapterCard(S.chapter); hud(); redraw(); if (S.selected) { const s = S.selected; s.type === "item" ? showItem(s.item) : s.type === "place" ? showPlace(s.place) : showPlaza(s.f); } });
   }

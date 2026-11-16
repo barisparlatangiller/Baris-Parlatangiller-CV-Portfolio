@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Baris Parlatangiller · Career Twin</title>
+  <title>Baris Parlatangiller · Portfolio</title>
   <meta name="description" content="Spatial analyst and urban planner. A 3D map of every role, project and map across ten countries, down to a one metre heat model of Frankfurt.">
-  <meta property="og:title" content="Baris Parlatangiller · Career Twin">
+  <meta property="og:title" content="Baris Parlatangiller · Portfolio">
   <meta property="og:description" content="Fly through ten countries of work, down to a 1 m heat model of Frankfurt's Altstadt.">
   <meta property="og:image" content="https://barisparlatangiller.github.io/Baris-Parlatangiller-CV-Portfolio/v2/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,13 +22,15 @@
   <!-- intro -->
   <section class="intro" id="intro">
     <div class="intro-l">
-      <p class="mono k">Career Twin · Nº 02/2026</p>
+      <p class="mono k" data-i18n="v2.kicker"></p>
       <h1><span>Baris</span><span>Parlatangiller</span></h1>
       <p class="intro-role" data-i18n="v2.role"></p>
       <p class="intro-text" data-i18n="v2.lede"></p>
       <div class="intro-ctas">
-        <button class="b b-klein" id="introStory"><i class="play"></i><span data-i18n="v2.story"></span></button>
+        <button class="b b-klein" id="introStory" data-i18n="v2.story"></button>
+        <a class="b b-line" id="introPdf" download data-i18n="v2.pdf"></a>
         <button class="b b-line" id="introEnter" data-i18n="v2.explore"></button>
+        <a class="b b-ghost" href="mailto:barisparlatangiller@gmail.com" data-i18n="v2.contact"></a>
       </div>
       <dl class="intro-stats" id="introStats"></dl>
     </div>
@@ -47,6 +49,7 @@
       <button class="kbd" id="cmdOpen" aria-label="Search"><span data-i18n="v2.search"></span><kbd>⌘K</kbd></button>
       <div class="seg" role="group" aria-label="Language"><button data-lang="en">EN</button><button data-lang="de">DE</button><button data-lang="tr">TR</button></div>
       <a class="toplink" href="../cv.html" data-keep-lang data-i18n="v2.cv"></a>
+      <a class="toplink" href="mailto:barisparlatangiller@gmail.com" data-i18n="v2.contact"></a>
       <a class="toplink dim" href="../" data-keep-lang data-i18n="v2.classic"></a>
     </div>
   </header>
@@ -74,7 +77,6 @@
   <article class="chap" id="chap" hidden></article>
 
   <footer class="hud-bottom">
-    <button class="playbtn" id="playBtn" aria-label="Play"><i class="play"></i></button>
     <div class="timeline" id="timeline"></div>
     <div class="readout mono"><span id="coords">50.1109° N · 8.6821° E</span><span id="ratio">1 : 25 000 000</span></div>
   </footer>
@@ -101,6 +103,7 @@
     <div class="intro-ctas">
       <a class="b b-klein" id="endCv" href="../cv.html" data-keep-lang data-i18n="v2.cv"></a>
       <a class="b b-line" id="endPdf" download>PDF</a>
+      <a class="b b-line" href="mailto:barisparlatangiller@gmail.com" data-i18n="v2.contact"></a>
       <button class="b b-line" id="endExplore" data-i18n="v2.end.explore"></button>
     </div>
   </div>
