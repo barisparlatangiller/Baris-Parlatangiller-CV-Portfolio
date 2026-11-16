@@ -44,7 +44,7 @@
   function stats() { const t = P.totals; return [[t.countries, T("pl.countries")], [t.places, T("pl.places")], [A.folio.length + 1, T("v3.projects")], [A.repos.length, T("stat.repos2")]]; }
   // link to the other variants, so the person can compare
   function switcher(current) {
-    return ["v3a", "v3b", "v3c"].map(v => `<a href="../${v}/?lang=${I.lang}" class="${v === current ? "on" : ""}">${v.toUpperCase()}</a>`).join("") + `<a href="../v2/?lang=${I.lang}">V2</a><a href="../?lang=${I.lang}">V1</a>`;
+    return ["v4a", "v4b", "v4c", "v3a", "v3b", "v3c"].map(v => `<a href="../${v}/?lang=${I.lang}" class="${v === current ? "on" : ""}">${v.toUpperCase()}</a>`).join("") + `<a href="../v2/?lang=${I.lang}">V2</a><a href="../?lang=${I.lang}">V1</a>`;
   }
   window.V3 = { A, P, L, T, esc, projects, chapterName, open, experience, maps, pdf, yr, stats, switcher, country, BASE };
 })();
